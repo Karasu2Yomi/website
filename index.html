@@ -9,6 +9,24 @@
   <script defer src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
   <script defer src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
   <script defer src="main.js?v=20251102"></script>
+  <style>
+      img.broken {
+          width: 200px;
+          height: 120px;
+          background: #eee url('data:image/svg+xml;charset=utf8, <svg xmlns="http://www.w3.org/2000/svg" width="200" height="120"><rect width="100%" height="100%" fill="%23ccc"/><text x="50%" y="50%" text-anchor="middle" fill="%23666" dy=".3em" font-size="14">No Image</text></svg>') center/contain no-repeat;
+      }
+  </style>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", () => {
+          document.querySelectorAll("img").forEach(img => {
+              img.onerror = () => {
+              img.classList.add("broken");
+              img.removeAttribute("src");
+              };
+          });
+      });
+  </script>
 </head>
 <body>
   <header class="site-header">
