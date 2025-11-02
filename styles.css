@@ -56,3 +56,31 @@ a { color: inherit; text-decoration: none; }
 
 /* Isotope 會把每個 .grid-item 絕對定位，保留卡片樣式即可 */
 .grid-item { margin: 0; } /* 間距交給 gutter（若用）或卡片內邊距；或用外距搭配 packery */
+
+
+/* 文章頁佈局 */
+.post-layout { display: grid; gap: 24px; grid-template-columns: 1fr; }
+@media (min-width: 992px) { .post-layout { grid-template-columns: 220px 1fr; } }
+
+.post-hero { max-height: 420px; overflow: hidden; }
+.post-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.post-content { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+.post-content img { max-width: 100%; height: auto; border-radius: 10px; }
+
+.toc { position: sticky; top: 16px; align-self: start; background: #0d0f16; border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+.toc h3 { margin: 0 0 8px; font-size: 14px; color: var(--muted); }
+.toc ul { list-style: none; padding: 0; margin: 0; }
+.toc li { margin: 6px 0; font-size: 14px; }
+.toc .toc-h2 { margin-left: 8px; }
+.toc .toc-h3 { margin-left: 16px; }
+.toc a { color: var(--accent); }
+
+.back-link { color: var(--accent); }
+
+/* Lightbox */
+.lightbox { position: fixed; inset: 0; display: none; }
+.lightbox.show { display: block; z-index: 9999; }
+.lightbox-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.8); }
+.lightbox-img { position: absolute; top:50%; left:50%; transform: translate(-50%,-50%); max-width: 92vw; max-height: 92vh; border-radius: 12px; }
+.lightbox-close { position: absolute; top: 16px; right: 20px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.4); border-radius: 999px; font-size: 24px; width: 36px; height: 36px; cursor: pointer; }

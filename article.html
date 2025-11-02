@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>文章｜Portfolio</title>
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- 渲染 Markdown -->
+  <script defer src="https://unpkg.com/marked/marked.min.js"></script>
+  <!-- 語法上色 -->
+  <link rel="stylesheet" href="https://unpkg.com/highlight.js@11.9.0/styles/github-dark.min.css">
+  <script defer src="https://unpkg.com/highlight.js@11.9.0/lib/common.min.js"></script>
+
+  <script defer src="article.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="back-link">← 回首頁</a>
+      <h1 id="post-title">文章標題</h1>
+      <div class="post-meta">
+        <time id="post-date"></time>
+        <span id="post-tags"></span>
+      </div>
+    </div>
+  </header>
+
+  <section id="post-hero" class="post-hero" hidden>
+    <img id="post-hero-img" alt="hero">
+  </section>
+
+  <main class="container post-layout">
+    <aside class="toc" id="toc"></aside>
+    <article id="post-content" class="post-content">
+      <!-- 這裡由 JS 注入 -->
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">© <span id="y"></span> 你的名稱</div>
+  </footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>
