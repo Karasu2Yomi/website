@@ -45,6 +45,14 @@ a { color: inherit; text-decoration: none; }
 
 .site-footer { padding: 48px 0; color: var(--muted); text-align: center; border-top: 1px solid var(--border); margin-top: 40px; }
 
-/* Isotope 轉場（可微調） */
-.grid { transition: height .25s ease; }
-.grid-item { transition: transform .25s ease, opacity .2s ease; will-change: transform; }
+/* 取消先前的 display: grid；Isotope 會接管定位 */
+.grid { position: relative; }
+
+/* 用百分比做響應式欄位寬度：預設 2 欄、>=720px 3 欄、>=1024px 4 欄 */
+.grid-sizer,
+.grid-item { width: 50%; }             /* 2 欄 */
+@media (min-width: 720px)  { .grid-sizer, .grid-item { width: 33.3333%; } } /* 3 欄 */
+@media (min-width: 1024px) { .grid-sizer, .grid-item { width: 25%; } }      /* 4 欄 */
+
+/* Isotope 會把每個 .grid-item 絕對定位，保留卡片樣式即可 */
+.grid-item { margin: 0; } /* 間距交給 gutter（若用）或卡片內邊距；或用外距搭配 packery */
