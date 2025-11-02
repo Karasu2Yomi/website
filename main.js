@@ -1,6 +1,6 @@
 // ===== 可選：從 data.json 動態建立卡片 =====
 async function loadData() {
-  const res = await fetch('data.json');
+  const res = await fetch('data.json?v=20251102');
   const items = await res.json();
   const grid = document.querySelector('.grid');
   const frag = document.createDocumentFragment();
