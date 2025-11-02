@@ -85,7 +85,7 @@ async function init() {
   }
 
   // 1) 讀取 markdown
-  const res = await fetch(`/posts/${slug}.md?ts=${Date.now()}`);
+  const res = await fetch(`/website/posts/${slug}.md?ts=${Date.now()}`);
   if (!res.ok) {
     document.getElementById('post-content').textContent = '文章不存在或無法讀取。';
     return;
@@ -147,7 +147,7 @@ async function init() {
     const href = a.getAttribute('href');
     const m = href.match(/\/posts\/(.+?)\.md$/);
     if (m) {
-      a.href = `/article.html?slug=${m[1]}`;
+      a.href = `/website/article.html?slug=${m[1]}`;
     }
   });
 
