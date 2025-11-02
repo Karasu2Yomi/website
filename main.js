@@ -3,6 +3,36 @@ function debounce(fn, wait = 120) {
   let t; return (...args) => { clearTimeout(t); t = setTimeout(()=>fn(...args), wait); };
 }
 
+async function loadData() {
+  const res = await fetch('data.json');
+  const items = await res.json();
+  const grid = document.querySelector('.grid');
+  const frag = document.createDocumentFragment();
+  items.forEach(it => {
+    const el = document.createElement('article');
+    el.className = 'grid-item';
+    el.setAttribute('data-type', it.type);
+    el.setAttribute('data-title', it.title);
+    el.setAttribute('data-date', it.date);
+    el.setAttribute('data-tags', it.tags.join(','));
+    el.innerHTML = `
+      <a class="card" href="${it.href}" ${it.href.startsWith('http')?'target="_blank" rel="noreferrer"':''}>
+        <div class="thumb"><img src="${it.thumb}" alt="${it.title}" loading="lazy"></div>
+        <div class="card-body">
+          <h3>${it.title}</h3>
+          <p class="desc">${it.desc || ''}</p>
+          <ul class="meta-list">
+            <li>Tags: ${it.tags.join(', ')}</li>
+            <li>${it.type === 'project' ? 'Updated' : 'Published'}: ${it.date}</li>
+          </ul>
+        </div>
+      </a>`;
+    frag.appendChild(el);
+  });
+  grid.appendChild(frag);
+}
+
+document.addEventListener('DOMContentLoaded', loadData);
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.grid');
   const filterButtons = document.querySelectorAll('.filters .btn');
@@ -69,33 +99,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-async function loadData() {
-  const res = await fetch('data.json');
-  const items = await res.json();
-  const grid = document.querySelector('.grid');
-  const frag = document.createDocumentFragment();
-  items.forEach(it => {
-    const el = document.createElement('article');
-    el.className = 'grid-item';
-    el.setAttribute('data-type', it.type);
-    el.setAttribute('data-title', it.title);
-    el.setAttribute('data-date', it.date);
-    el.setAttribute('data-tags', it.tags.join(','));
-    el.innerHTML = `
-      <a class="card" href="${it.href}" ${it.href.startsWith('http')?'target="_blank" rel="noreferrer"':''}>
-        <div class="thumb"><img src="${it.thumb}" alt="${it.title}" loading="lazy"></div>
-        <div class="card-body">
-          <h3>${it.title}</h3>
-          <p class="desc">${it.desc || ''}</p>
-          <ul class="meta-list">
-            <li>Tags: ${it.tags.join(', ')}</li>
-            <li>${it.type === 'project' ? 'Updated' : 'Published'}: ${it.date}</li>
-          </ul>
-        </div>
-      </a>`;
-    frag.appendChild(el);
-  });
-  grid.appendChild(frag);
-}
-document.addEventListener('DOMContentLoaded', loadData);
+
 
