@@ -1,11 +1,59 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <title>Hello GitHub Pages</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>你的名稱｜Portfolio & Blog</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Isotope + imagesLoaded (CDN) -->
+  <script defer src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+  <script defer src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+  <script defer src="main.js"></script>
 </head>
 <body>
-  <h1>こんにちは、GitHub Pages！</h1>
-  <p>これはテストページです。</p>
+  <header class="site-header">
+    <div class="container">
+      <h1>你的名稱</h1>
+      <p class="subtitle">Game Dev / AI × Games / Blog</p>
+      <nav class="meta">
+        <a href="https://github.com/你的GitHub帳號" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="/feed.xml">RSS</a>
+        <a href="mailto:you@example.com">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="controls container">
+    <div class="filters">
+      <button class="btn is-checked" data-filter="*">全部</button>
+      <button class="btn" data-filter='[data-type="project"]'>作品</button>
+      <button class="btn" data-filter='[data-type="blog"]'>文章</button>
+      <!-- 依你的標籤再加 -->
+      <button class="btn" data-filter='[data-tags*="C++"]'>C++</button>
+      <button class="btn" data-filter='[data-tags*="AI"]'>AI</button>
+      <button class="btn" data-filter='[data-tags*="Game"]'>Game</button>
+    </div>
+
+    <div class="search-sort">
+      <input id="search" type="search" placeholder="搜尋標題、摘要、標籤…" />
+      <select id="sort">
+        <option value="date-desc">最新優先</option>
+        <option value="date-asc">最舊優先</option>
+        <option value="title-asc">標題 A→Z</option>
+        <option value="title-desc">標題 Z→A</option>
+      </select>
+    </div>
+  </section>
+
+  <main class="container">
+    <div class="grid">
+      
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">© <span id="y"></span> 你的名稱</div>
+  </footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>

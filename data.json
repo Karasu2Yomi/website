@@ -1,0 +1,20 @@
+[
+  {
+    "type": "project",
+    "title": "MNK Game AI",
+    "date": "2025-08-02",
+    "tags": ["C++","AI","Game"],
+    "href": "https://github.com/你的GitHub帳號/mnk-game",
+    "thumb": "assets/mnk.jpg",
+    "desc": "通用 MNK 對弈 AI。"
+  },
+  {
+    "type": "blog",
+    "title": "Raylib 混合模式筆記",
+    "date": "2025-07-11",
+    "tags": ["Raylib","Graphics","Game"],
+    "href": "/blog/raylib-blend-notes",
+    "thumb": "assets/raylib-blend.jpg",
+    "desc": "混合模式取捨。"
+  }
+]
