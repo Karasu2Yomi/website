@@ -4,29 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>你的名稱｜Portfolio & Blog</title>
-  <link rel="stylesheet" href="styles.css?v=20251102" />
-  <!-- Isotope + imagesLoaded (CDN) -->
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Isotope + imagesLoaded -->
   <script defer src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
   <script defer src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
-  <script defer src="main.js?v=20251102"></script>
-  <style>
-      img.broken {
-          width: 200px;
-          height: 120px;
-          background: #eee url('data:image/svg+xml;charset=utf8, <svg xmlns="http://www.w3.org/2000/svg" width="200" height="120"><rect width="100%" height="100%" fill="%23ccc"/><text x="50%" y="50%" text-anchor="middle" fill="%23666" dy=".3em" font-size="14">No Image</text></svg>') center/contain no-repeat;
-      }
-  </style>
-
-  <script>
-      document.addEventListener("DOMContentLoaded", () => {
-          document.querySelectorAll("img").forEach(img => {
-              img.onerror = () => {
-              img.classList.add("broken");
-              img.removeAttribute("src");
-              };
-          });
-      });
-  </script>
+  <script defer src="main.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -35,7 +17,7 @@
       <p class="subtitle">Game Dev / AI × Games / Blog</p>
       <nav class="meta">
         <a href="https://github.com/你的GitHub帳號" target="_blank" rel="noreferrer">GitHub</a>
-        <a href="/feed.xml">RSS</a>
+        <a href="/" aria-current="page">Home</a>
         <a href="mailto:you@example.com">Contact</a>
       </nav>
     </div>
@@ -46,15 +28,14 @@
       <button class="btn is-checked" data-filter="*">全部</button>
       <button class="btn" data-filter='[data-type="project"]'>作品</button>
       <button class="btn" data-filter='[data-type="blog"]'>文章</button>
-      <!-- 依你的標籤再加 -->
       <button class="btn" data-filter='[data-tags*="C++"]'>C++</button>
       <button class="btn" data-filter='[data-tags*="AI"]'>AI</button>
       <button class="btn" data-filter='[data-tags*="Game"]'>Game</button>
     </div>
 
     <div class="search-sort">
-      <input id="search" type="search" placeholder="搜尋標題、摘要、標籤…" />
-      <select id="sort">
+      <input id="search" type="search" placeholder="搜尋標題、摘要、標籤…" inputmode="search" />
+      <select id="sort" aria-label="排序">
         <option value="date-desc">最新優先</option>
         <option value="date-asc">最舊優先</option>
         <option value="title-asc">標題 A→Z</option>
@@ -66,12 +47,13 @@
   <main class="container">
     <div class="grid">
       <div class="grid-sizer"></div>
+      <!-- 動態渲染卡片 -->
     </div>
   </main>
 
   <footer class="site-footer">
     <div class="container">© <span id="y"></span> 你的名稱</div>
   </footer>
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
 </body>
 </html>

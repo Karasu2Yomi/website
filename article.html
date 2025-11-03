@@ -4,39 +4,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>文章｜Portfolio</title>
-
-  <link rel="stylesheet" href="styles.css?v=20251102" />
-
-  <!-- 渲染 Markdown -->
-  <script defer src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
-  <!-- 語法上色 -->
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Markdown + code highlight -->
+  <script defer src="https://unpkg.com/marked/marked.min.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/highlight.js@11.9.0/styles/github-dark.min.css">
   <script defer src="https://unpkg.com/highlight.js@11.9.0/lib/common.min.js"></script>
-
-  <script defer src="article.js?v=20251102"></script>
-  <style>
-      img.broken {
-          width: 200px;
-          height: 120px;
-          background: #eee url('data:image/svg+xml;charset=utf8, <svg xmlns="http://www.w3.org/2000/svg" width="200" height="120"><rect width="100%" height="100%" fill="%23ccc"/><text x="50%" y="50%" text-anchor="middle" fill="%23666" dy=".3em" font-size="14">No Image</text></svg>') center/contain no-repeat;
-      }
-  </style>
-
-  <script>
-      document.addEventListener("DOMContentLoaded", () => {
-          document.querySelectorAll("img").forEach(img => {
-              img.onerror = () => {
-              img.classList.add("broken");
-              img.removeAttribute("src");
-              };
-          });
-      });
-  </script>
+  <script defer src="article.js"></script>
 </head>
 <body>
   <header class="site-header">
     <div class="container">
-      <a href="/website" class="back-link">← 回首頁</a>
+      <a href="/" class="back-link">← 回首頁</a>
       <h1 id="post-title">文章標題</h1>
       <div class="post-meta">
         <time id="post-date"></time>
@@ -45,20 +23,21 @@
     </div>
   </header>
 
+  <!-- 題圖區塊：與正文完美對齊 -->
   <section id="post-hero" class="post-hero" hidden>
-    <img id="post-hero-img" alt="hero">
+    <div class="container">
+      <div class="hero"><img id="post-hero-img" alt="hero"></div>
+    </div>
   </section>
 
   <main class="container post-layout">
     <aside class="toc" id="toc"></aside>
-    <article id="post-content" class="post-content">
-      <!-- 這裡由 JS 注入 -->
-    </article>
+    <article id="post-content" class="post-content"></article>
   </main>
 
   <footer class="site-footer">
     <div class="container">© <span id="y"></span> 你的名稱</div>
   </footer>
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
 </body>
 </html>
