@@ -10,6 +10,14 @@ function arrangeWithoutTransitions(args){
   });
 }
 
+function arrangeSoft(args){
+  const prev = iso.options.transitionDuration;
+  iso.options.transitionDuration = '120ms'; // 保持短促、統一
+  iso.arrange(args);
+  iso.once('arrangeComplete', () => { iso.options.transitionDuration = prev; });
+}
+
+
 
 // 圖片事件：成功→淡入並關骨架；失敗→顯示錯誤層
 function attachImgHandlers(img){
@@ -96,11 +104,11 @@ function initIsotope(){
     percentPosition: true,
     masonry: { columnWidth: '.grid-sizer', gutter: '.gutter-sizer' },
 
-    /* 關鍵：去掉縮放，只保留透明度；初始動畫時間 160ms */
-    transitionDuration: '160ms',
-    hiddenStyle:  { opacity: 0 },   // ← 不用 scale
-    visibleStyle: { opacity: 1 },
-    stagger: 0,                      // ← 關掉逐格延遲，避免波浪感
+    // 關鍵：小位移 + 淡入；時間短；不使用 scale、不使用 stagger
+    transitionDuration: '120ms',
+    hiddenStyle:  { opacity: 0, transform: 'translateY(8px)' },
+    visibleStyle: { opacity: 1, transform: 'translateY(0)'   },
+    stagger: 0,
 
     getSortData: {
       date: el => new Date(el.dataset.date || 0).getTime() || 0,
@@ -128,7 +136,7 @@ function initIsotope(){
       btn.classList.add('is-checked');
       currentFilter = btn.getAttribute('data-filter') || '*';
       //iso.arrange({ filter: compositeFilter });
-      arrangeWithoutTransitions({ filter: compositeFilter });
+      arrangeSoft({ filter: compositeFilter });
     });
   });
 
@@ -137,7 +145,7 @@ function initIsotope(){
     searchInput.addEventListener('input', debounce(()=>{
       currentQuery = (searchInput.value || '').trim().toLowerCase();
       //iso.arrange({ filter: compositeFilter });
-      arrangeWithoutTransitions({ filter: compositeFilter });
+      arrangeSoft({ filter: compositeFilter });
     }, 150));
   }
 
@@ -150,7 +158,7 @@ function initIsotope(){
         v === 'date-asc'   ? { sortBy:'date',  sortAscending:true  } :
         v === 'title-asc'  ? { sortBy:'title', sortAscending:true  } :
                             { sortBy:'title', sortAscending:false };
-      arrangeWithoutTransitions(opt);
+      arrangeSoft(opt);
     });
   }
 
