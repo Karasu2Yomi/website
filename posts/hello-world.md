@@ -2,7 +2,7 @@
 title: Hello World
 date: 2025-10-20
 tags: [Web, Frontend, Isotope]
-hero: /assets/isotope-hero.jpg
+hero: /website/assets/test_02.jpg
 excerpt: 用 Markdown + Isotope 打造作品集與部落格。
 ---
 
