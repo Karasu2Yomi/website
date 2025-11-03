@@ -1,6 +1,14 @@
 // ===== Utils =====
 function debounce(fn, wait = 120){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), wait); }; }
 
+function lockGridHeight(gridEl){
+  const h = gridEl.getBoundingClientRect().height;
+  gridEl.style.height = h + 'px';
+}
+function unlockGridHeight(gridEl){
+  gridEl.style.height = '';
+}
+
 // 圖片事件：成功→淡入並關骨架；失敗→顯示錯誤層
 function attachImgHandlers(img){
   const parent = img.closest('.thumb, .hero');
