@@ -67,7 +67,7 @@ async function init(){
   const slug=getSlug();
   if(!slug){ document.getElementById('post-content').textContent='缺少 slug 參數。'; return; }
 
-  const res=await fetch(`/posts/${slug}.md?ts=${Date.now()}`);
+  const res=await fetch(`/website/posts/${slug}.md?ts=${Date.now()}`);
   if(!res.ok){ document.getElementById('post-content').textContent='文章不存在或無法讀取。'; return; }
   const raw=await res.text();
   const {data, body}=parseFrontMatter(raw);
@@ -113,9 +113,9 @@ async function init(){
   enhanceImages($content);
 
   // 內部連結 → 文章頁
-  $content.querySelectorAll('a[href^="./"], a[href^="/posts/"]').forEach(a=>{
-    const m=a.getAttribute('href').match(/\/posts\/(.+?)\.md$/);
-    if(m) a.href=`/article.html?slug=${m[1]}`;
+  $content.querySelectorAll('a[href^="./"], a[href^="/website/posts/"]').forEach(a=>{
+    const m=a.getAttribute('href').match(/\/website\/\/posts\/(.+?)\.md$/);
+    if(m) a.href=`/website/article.html?slug=${m[1]}`;
   });
 }
 
