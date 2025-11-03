@@ -10,17 +10,20 @@ function debounce(fn, wait = 120) {
 function attachImgHandlers(img) {
   const parent = img.closest('.thumb, .hero');
   const show = () => {
-    img.classList.add('img-loaded');
-    if (parent) parent.classList.add('is-loaded'); // 關掉骨架
+    img.classList.add('img-loaded');        // 加在 <img> 本體上
+    if (parent) parent.classList.add('is-loaded');
+    parent?.classList.remove('is-error');
+    img.style.removeProperty('display');
   };
   if (img.complete && img.naturalWidth > 0) show();
   else img.addEventListener('load', show, { once: true });
 
   img.addEventListener('error', () => {
-    if (parent) parent.classList.add('is-error');
+    parent?.classList.add('is-error');
     img.style.display = 'none';
   }, { once: true });
 }
+
 
 // ===============================
 // Data -> DOM
