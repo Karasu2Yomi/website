@@ -112,7 +112,7 @@ a{color:inherit;text-decoration:none}
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   opacity:0;transition:opacity .25s ease;display:block;
 }
-.img-loaded{opacity:1}
+.thumb>img.img-loaded{opacity:1 !important}
 
 /* 失敗（不載入外部佔位圖） */
 .thumb.is-error::before{
@@ -250,3 +250,17 @@ a{color:inherit;text-decoration:none}
 @media (prefers-reduced-motion: reduce) {
   .thumb, .hero { animation: none !important; }
 }
+
+.thumb > img.img-loaded,
+.hero  > img.img-loaded {
+  opacity: 1;               /* 關鍵：比 .thumb>img 更高的 specificity */
+}
+
+.thumb.is-loaded { background: none; animation: none; }
+.post-hero .hero.is-loaded { background: none; animation: none; }
+
+.thumb { position: relative; }
+.thumb::before { position: relative; z-index: 0; }  /* 只負責占位，不蓋圖 */
+.thumb > img { position: absolute; inset: 0; z-index: 1; }  /* 圖一定在上層 */
+
+.thumb.is-error::before { position: absolute; inset: 0; z-index: 2; } /* 只有 error 才覆蓋 */
