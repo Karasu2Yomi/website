@@ -241,3 +241,12 @@ a{color:inherit;text-decoration:none}
   }
   .grid-item--w2, .grid-item--w3{ width:100% !important; }
 }
+
+/* 圖片載入完成後，關掉骨架背景與動畫 */
+.thumb.is-loaded { background: none; animation: none; }
+.post-hero .hero.is-loaded { background: none; animation: none; }
+
+/* （可選）降低系統偏好下骨架動畫 */
+@media (prefers-reduced-motion: reduce) {
+  .thumb, .hero { animation: none !important; }
+}

@@ -8,13 +8,16 @@ function debounce(fn, wait = 120) {
 
 // 圖片事件：載入 → 淡入；失敗 → 父容器標記 .is-error 並隱藏破圖
 function attachImgHandlers(img) {
-  const show = () => img.classList.add('img-loaded');
+  const parent = img.closest('.thumb, .hero');
+  const show = () => {
+    img.classList.add('img-loaded');
+    if (parent) parent.classList.add('is-loaded'); // 關掉骨架
+  };
   if (img.complete && img.naturalWidth > 0) show();
   else img.addEventListener('load', show, { once: true });
 
   img.addEventListener('error', () => {
-    const box = img.parentElement; // .thumb
-    if (box) box.classList.add('is-error');
+    if (parent) parent.classList.add('is-error');
     img.style.display = 'none';
   }, { once: true });
 }

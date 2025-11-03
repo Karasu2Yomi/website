@@ -96,10 +96,15 @@ async function init(){
   let heroSrc=hero;
   if(!heroSrc){ const first=$content.querySelector('img'); if(first) heroSrc=first.src; }
   if(heroSrc){
-    const wrap=document.getElementById('post-hero'); const img=document.getElementById('post-hero-img');
-    img.src=heroSrc; img.decoding='async';
+    const wrap=document.getElementById('post-hero'); 
+    const img=document.getElementById('post-hero-img');
+    img.src=heroSrc; 
+    img.decoding='async';
     // 載入完成淡入
-    const show=()=> img.classList.add('img-loaded');
+    const show=()=> {
+      img.classList.add('img-loaded');
+      if (wrap) wrap.classList.add('is-loaded'); // 關掉骨架
+    };
     if(img.complete && img.naturalWidth>0) show(); else img.addEventListener('load', show, {once:true});
     // 失敗樣式（不載入任何佔位圖）
     img.addEventListener('error', ()=>{
