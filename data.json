@@ -35,5 +35,79 @@
     "tags": ["Web","Frontend","Isotope"],
     "thumb": "/assets/isotope-thumb.jpg",
     "excerpt": "用 Markdown + Isotope 打造作品集與部落格。"
+  },
+  {
+    "type": "project",
+    "title": "MNK Game AI",
+    "date": "2025-08-02",
+    "tags": ["C++","AI","Game"],
+    "href": "https://github.com/你的GitHub帳號/mnk-game",
+    "thumb": "/assets/mnk.jpg",
+    "excerpt": "通用 MNK（3/4/5 連珠）AI 與可視化對弈。"
+  },
+  {
+    "type": "project",
+    "title": "Top-Down Tank",
+    "date": "2025-06-29",
+    "tags": ["C++","Game","AI"],
+    "href": "https://github.com/你的GitHub帳號/tank",
+    "thumb": "/assets/tank.jpg",
+    "excerpt": "無 HP、穿甲判定、乘員永久死亡的 2D 坦克原型。"
+  },
+  {
+    "type": "blog",
+    "title": "Hello World",
+    "slug": "hello-world",
+    "date": "2025-10-20",
+    "tags": ["Web","Frontend","Isotope"],
+    "thumb": "/assets/isotope-thumb.jpg",
+    "excerpt": "用 Markdown + Isotope 打造作品集與部落格。"
+  },
+  {
+    "type": "blog",
+    "size": "h2",
+    "title": "Hello World",
+    "slug": "hello-world",
+    "date": "2025-10-20",
+    "tags": ["Web","Frontend","Isotope"],
+    "thumb": "/assets/isotope-thumb.jpg",
+    "excerpt": "用 Markdown + Isotope 打造作品集與部落格。"
+  }
+  {
+    "type": "project",
+    "title": "MNK Game AI",
+    "date": "2025-08-02",
+    "tags": ["C++","AI","Game"],
+    "href": "https://github.com/你的GitHub帳號/mnk-game",
+    "thumb": "/assets/mnk.jpg",
+    "excerpt": "通用 MNK（3/4/5 連珠）AI 與可視化對弈。"
+  },
+  {
+    "type": "project",
+    "title": "Top-Down Tank",
+    "date": "2025-06-29",
+    "tags": ["C++","Game","AI"],
+    "href": "https://github.com/你的GitHub帳號/tank",
+    "thumb": "/assets/tank.jpg",
+    "excerpt": "無 HP、穿甲判定、乘員永久死亡的 2D 坦克原型。"
+  },
+  {
+    "type": "blog",
+    "title": "Hello World",
+    "slug": "hello-world",
+    "date": "2025-10-20",
+    "tags": ["Web","Frontend","Isotope"],
+    "thumb": "/assets/isotope-thumb.jpg",
+    "excerpt": "用 Markdown + Isotope 打造作品集與部落格。"
+  },
+  {
+    "type": "blog",
+    "size": "w3",
+    "title": "Hello World",
+    "slug": "hello-world",
+    "date": "2025-10-20",
+    "tags": ["Web","Frontend","Isotope"],
+    "thumb": "/assets/isotope-thumb.jpg",
+    "excerpt": "用 Markdown + Isotope 打造作品集與部落格。"
   }
 ]
