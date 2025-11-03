@@ -1,5 +1,5 @@
 /* =========================
-   基本主題與排版
+   Base Theme
    ========================= */
 :root{
   --bg:#0b0c10; --fg:#e6e6e6; --muted:#9aa0a6;
@@ -24,7 +24,7 @@ a{color:inherit;text-decoration:none}
 .meta a{margin-right:12px;color:var(--accent)}
 
 /* =========================
-   控制列（篩選 / 搜尋 / 排序）
+   Controls
    ========================= */
 .controls{
   display:grid;grid-template-columns:1fr auto;gap:12px;
@@ -44,108 +44,125 @@ a{color:inherit;text-decoration:none}
 }
 
 /* =========================
-   Isotope 瀑布流：含間隔的整倍數（寬/高）
+   Masonry Grid (Isotope)
+   —— 寬度含間隔整倍數；高度用 padding-top 佔位（穩定）
    ========================= */
-/* 桌面預設：4 欄 + 16px 間隔；所有寬/高皆以「含間隔」整倍計算 */
 .grid{
   position:relative;transition:height .25s ease;padding:4px 0;
 
-  --cols: 4;             /* 欄數（桌面） */
-  --gut: 16px;           /* 欄間距（桌面） */
+  /* PC 預設：4 欄 + 16px 間距 */
+  --cols: 4;
+  --gut: 16px;
 
-  /* 單欄寬（整體扣掉所有間距後平均分配） */
+  /* 單欄寬（扣除所有間距後平均分配） */
   --colw: calc((100% - (var(--cols) - 1) * var(--gut)) / var(--cols));
 
-  /* 基礎列高（縮圖高 + 固定文字區）；ratio 可改 10/16、9/16 等 */
-  --thumb-ratio: 0.5625; /* 9/16 視覺偏寬 */
-  --body-h: 88px;        /* 標題 + 兩行摘要 + meta；可微調 */
-  --rowh: calc(var(--colw) * var(--thumb-ratio) + var(--body-h));
+  /* 縮圖基準比例（16:10 → 62.5%） */
+  --thumb-pct: 62.5%;
+  /* 高度倍數：h2/h3 在此以更高的 padding 百分比實現（穩定、不壓縮） */
+  --thumb-pct-h2: 100%;   /* 視覺更高 */
+  --thumb-pct-h3: 140%;
 }
 
-/* sizer 供 Isotope 讀取 */
+/* sizer 給 Isotope 讀取 */
 .grid-sizer, .grid-item{ width: var(--colw); }
 .gutter-sizer{ width: var(--gut); }
 
-/* 垂直間距同樣用 gutter，Isotope 會計入高度 */
+/* 垂直間距 = gutter，Isotope 會計入高度 */
 .grid-item{
   margin-bottom: var(--gut);
   will-change: transform, opacity;
-  height: var(--rowh);   /* 高度基準（1×列高） */
   transition: transform .18s ease, opacity .18s ease;
 }
 
-/* 寬度倍數（含中間間隔） */
+/* —— 寬度倍數（含中間間隔） —— */
 .grid-item--w2{ width: calc(2 * var(--colw) + 1 * var(--gut)); }
 .grid-item--w3{ width: calc(3 * var(--colw) + 2 * var(--gut)); }
 
-/* 高度倍數（含中間間隔） */
-.grid-item--h2{ height: calc(2 * var(--rowh) + 1 * var(--gut)); }
-.grid-item--h3{ height: calc(3 * var(--rowh) + 2 * var(--gut)); }
-
 /* =========================
-   卡片（含 CSS 骨架佔位）
+   Card
    ========================= */
 .card{
-  height:100%;display:flex;flex-direction:column;
   background:var(--card);border:1px solid var(--border);
   border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;height:auto;
   transition:transform .2s ease,border-color .2s ease;
 }
 .card:hover{transform:translateY(-2px);border-color:var(--accent)}
 
-/* 縮圖：填滿剩餘空間；純 CSS 骨架 */
-.thumb,.hero{
-  flex:1 1 auto; min-height:0; position:relative; overflow:hidden;
-  border-radius:12px; box-shadow:var(--shadow);
+/* 縮圖：用 padding-top 佔位，圖片絕對定位鋪滿（更穩定） */
+.thumb{
+  position:relative;overflow:hidden;border-radius:12px;box-shadow:var(--shadow);
+  /* 骨架動畫（純 CSS） */
   background:linear-gradient(90deg,#14161d 25%,#1b1f2a 50%,#14161d 75%);
-  background-size:200% 100%; animation:skeleton 1.1s linear infinite;
+  background-size:200% 100%;animation:skeleton 1.1s linear infinite;
 }
 @keyframes skeleton{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-.thumb>img,.hero>img{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;opacity:0;transition:opacity .25s ease;display:block;
+/* 基準高度（16:10） */
+.thumb::before{
+  content:"";display:block;padding-top:var(--thumb-pct);
+}
+/* 高度倍數（用更高的 padding 百分比） */
+.grid-item--h2 .thumb::before{ padding-top: var(--thumb-pct-h2); }
+.grid-item--h3 .thumb::before{ padding-top: var(--thumb-pct-h3); }
+
+/* 圖片鋪滿容器，載入後淡入 */
+.thumb>img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity .25s ease;display:block;
 }
 .img-loaded{opacity:1}
 
-/* 失敗（不載入外部佔位圖）：用樣式提示 */
-.thumb.is-error::before,.hero.is-error::before{
-  content:"No Image";
-  position:absolute;inset:0;display:grid;place-items:center;
-  color:#9aa0a6;font-size:14px;letter-spacing:.08em;
+/* 失敗（不載入外部佔位圖） */
+.thumb.is-error::before{
+  content:"No Image";display:grid;place-items:center;
+  position:absolute;inset:0;color:#9aa0a6;font-size:14px;letter-spacing:.08em;
   background:linear-gradient(180deg,#151823 0%,#11131a 100%);
   border:1px dashed #2a2f3a;border-radius:12px;
 }
 
-/* 文字區固定高（對齊 --body-h）避免把卡片撐壞 */
+/* 文字區：固定高度，避免把卡片撐壞（與 PC 設計對齊） */
 .card-body{
-  flex:0 0 var(--body-h);
+  flex:0 0 88px; /* 可視覺微調 → 96/104 皆可 */
   padding:14px 14px 12px;
   display:grid;grid-template-rows:auto auto 1fr;row-gap:10px;
 }
 .card-body h3{
-  margin:0; font-size:18px; letter-spacing:.2px;
-  display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden;
+  margin:0;font-size:18px;letter-spacing:.2px;
+  display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;
 }
 .desc{
   margin:0;color:var(--muted);
-  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
 .meta-list{
   list-style:none;padding:0;margin:0;
   display:flex;flex-wrap:wrap;gap:10px;color:var(--muted);font-size:13px;
 }
 
-/* 類型視覺差異（可選擇保留/調整） */
-.grid-item[data-type="project"] .thumb{ /* 視覺偏高可在此微調 */ }
-.grid-item[data-type="blog"]    .thumb{ /* 視覺偏寬可在此微調 */ }
+/* 類型視覺差異（可視需要微調） */
+.grid-item[data-type="project"] .thumb{ /* 可加入微妙遮色片等視覺差異 */ }
+.grid-item[data-type="blog"]    .thumb{}
 
 /* =========================
-   文章頁：Hero 對齊 + 內容 + TOC
+   Article Page (Hero / TOC)
    ========================= */
 .post-hero{margin:32px 0 24px}
 .post-hero .container{max-width:1100px;margin:0 auto;padding:0 20px}
-.hero{ /* 用於文章 hero 圖容器（沿用骨架） */ }
+
+/* Hero 脫離卡片規則，使用固定高度範圍（不壓縮） */
+.post-hero .hero{
+  position:relative;overflow:hidden;border-radius:var(--radius);box-shadow:var(--shadow);
+  height: clamp(220px, 35vw, 420px);
+  background:linear-gradient(90deg,#14161d 25%,#1b1f2a 50%,#14161d 75%);
+  background-size:200% 100%;animation:skeleton 1.1s linear infinite;
+}
+.post-hero .hero>img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity .25s ease;display:block;
+}
+.post-hero .hero>img.img-loaded{opacity:1}
 
 .post-layout{display:grid;gap:24px;grid-template-columns:1fr}
 @media (min-width:992px){ .post-layout{grid-template-columns:220px 1fr} }
@@ -192,22 +209,20 @@ a{color:inherit;text-decoration:none}
 }
 
 /* =========================
-   響應式：平板＝2 欄；手機＝1 欄
-   （寬/高仍維持含間隔的整倍數）
+   Responsive
    ========================= */
-
-/* 📟 平板：2 欄、14px gutter；w3 無效（收斂） */
+/* 平板：2 欄 / 14px 間距（你要求的 2 欄） */
 @media (min-width:720px) and (max-width:1023.98px){
   .grid{
     --cols: 2;
     --gut: 14px;
     --colw: calc((100% - (var(--cols) - 1) * var(--gut)) / var(--cols));
-    --rowh: calc(var(--colw) * var(--thumb-ratio) + var(--body-h));
   }
-  .grid-item--w3{ width: 100% !important; }
+  /* w3 在兩欄不適用，保守處理 */
+  .grid-item--w3{ width:100% !important; }
 }
 
-/* 📱 手機：1 欄、12px gutter；所有寬度倍數收斂為 100% */
+/* 手機：1 欄 / 12px 間距（最穩） */
 @media (max-width:719.98px){
   .site-header{padding:28px 0 16px}
   .site-header h1{font-size:26px}
@@ -223,88 +238,6 @@ a{color:inherit;text-decoration:none}
     --cols: 1;
     --gut: 12px;
     --colw: calc((100% - (var(--cols) - 1) * var(--gut)) / var(--cols));
-    --rowh: calc(var(--colw) * var(--thumb-ratio) + var(--body-h));
   }
   .grid-item--w2, .grid-item--w3{ width:100% !important; }
-}
-
-/* ========== HOTFIX 1：卡片高度交回內容，自適應，不再固定外層高度 ========== */
-
-/* 取消固定高度（先前的 height: var(--rowh) 以及 --h2/--h3 的 height 全部撤銷） */
-.grid-item { height: auto !important; }
-
-/* 高度倍數：改由縮圖比例控制，而不是外層高度硬塞 */
-.thumb { aspect-ratio: 16 / 10; }              /* 基準卡片比例 */
-.grid-item--h2 .thumb { aspect-ratio: 16 / 20; }  /* 視覺更高（≈ 1.25x）*/
-.grid-item--h3 .thumb { aspect-ratio: 16 / 30; }  /* 視覺更高（≈ 1.5x）*/
-
-/* 文字區固定高度，避免把卡片撐破（可微調這個高度以配合你的字數） */
-.card { display: flex; flex-direction: column; height: auto; }
-.card-body {
-  flex: 0 0 88px;              /* 與先前 --body-h 對齊；可改 96/104 做微調 */
-  padding: 14px 14px 12px;
-  display: grid;
-  grid-template-rows: auto auto 1fr; 
-  row-gap: 10px;
-}
-.card-body h3 {
-  margin: 0;
-  display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
-}
-.desc {
-  margin: 0; color: var(--muted);
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-
-/* 類型差異保留（只做視覺，不再改外層高度） */
-.grid-item[data-type="project"] .thumb { /* project 可偏高些（已由 h2/h3 控） */ }
-.grid-item[data-type="blog"] .thumb    { /* blog 偏寬（基準 16/10 已足夠） */ }
-
-/* ========== HOTFIX 2：Hero 與卡片縮圖脫鉤，避免被壓縮 ========== */
-
-/* 文章頁 Hero 使用獨立尺寸，不吃 .thumb/.hero 共用的 flex 行為 */
-.post-hero .hero {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  /* 給一個響應式高度範圍：桌面上限 420px，手機不會太矮 */
-  height: clamp(220px, 35vw, 420px);
-}
-
-/* Hero 圖片鋪滿容器，高度自適應，不會被拉扁 */
-.post-hero .hero > img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
-  opacity: 0; transition: opacity .25s ease;
-}
-.post-hero .hero > img.img-loaded { opacity: 1; }
-
-/* 移除會影響 Hero 的「骨架 flex:1」等共用規則 */
-.post-hero .hero { flex: none !important; background: none; animation: none; }
-
-/* ========== HOTFIX 3：平板要兩欄（你提到只有一欄的情況） ========== */
-
-/* 依然使用先前的等式：寬度含間隔的整倍數，這裡只確保平板是 2 欄 */
-@media (min-width: 720px) and (max-width: 1023.98px){
-  .grid{
-    --cols: 2;
-    --gut: 14px;
-    --colw: calc((100% - (var(--cols) - 1) * var(--gut)) / var(--cols));
-    /* 不再計算 --rowh，因為我們不固定外層高度了 */
-  }
-  /* w3 在兩欄時無意義，保守收斂為整列寬 */
-  .grid-item--w3 { width: 100% !important; }
-}
-
-/* 手機 1 欄（維持既有），確保不會出洞 */
-@media (max-width: 719.98px){
-  .grid{
-    --cols: 1;
-    --gut: 12px;
-    --colw: calc((100% - (var(--cols) - 1) * var(--gut)) / var(--cols));
-  }
-  .grid-item--w2, .grid-item--w3 { width: 100% !important; }
 }
