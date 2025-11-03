@@ -139,9 +139,18 @@ a{color:inherit;text-decoration:none}
 
 /* Footer */
 .site-footer{padding:48px 0;color:var(--muted);text-align:center;border-top:1px solid var(--border);margin-top:40px}
+@media (min-width:720px) and (max-width:1023.98px){
+  .grid{
+    --cols: 2;
+    --gut: 14px;
+    --colw: calc((100% - (var(--cols) - 1) * var(--gut)) / var(--cols));
+  }
+  /* w3 在兩欄不適用，保守處理 */
+  .grid-item--w3{ width:100% !important; }
+}
 
-/* 手機優化 */
-@media (max-width:640px){
+/* 手機：1 欄 / 12px 間距（最穩） */
+@media (max-width:719.98px){
   .site-header{padding:28px 0 16px}
   .site-header h1{font-size:26px}
   .controls{grid-template-columns:1fr;gap:10px}
@@ -151,17 +160,15 @@ a{color:inherit;text-decoration:none}
   #search{flex:1}
   .post-hero .container{padding:0 14px}
   .post-content{padding:16px}
-}
-/* 手機：單欄填滿，沒有空缺 */
-@media (max-width: 719.98px){
-  .grid-sizer, .grid-item { width: 100%; }
-  .gutter-sizer { width: 12px; }               /* 保留一點水平間距 */
-  .grid-item--w2, .grid-item--w3 { width: 100% !important; } /* 禁用寬變體 */
+
+  .grid{
+    --cols: 1;
+    --gut: 12px;
+    --colw: calc((100% - (var(--cols) - 1) * var(--gut)) / var(--cols));
+  }
+  .grid-item--w2, .grid-item--w3{ width:100% !important; }
 }
 
-/* 平板：兩欄；同樣禁用寬變體避免洞 */
-@media (min-width: 720px) and (max-width: 1023.98px){
-  .grid-sizer, .grid-item { width: 50%; }
-  .gutter-sizer { width: 12px; }
-  .grid-item--w2, .grid-item--w3 { width: 100% !important; }
-}
+/* 圖片載入完成後，關掉骨架背景與動畫 */
+.thumb.is-loaded { background: none; animation: none; }
+.post-hero .hero.is-loaded { background: none; animation: none; }
