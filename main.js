@@ -1,9 +1,9 @@
 const PLACEHOLDER_CSS_ONLY = true; // 僅用 CSS 骨架，不使用佔位圖
 
 function debounce(fn, wait=120){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), wait); }; }
-const relayout = debounce(()=> iso.layout(), 100);
-window.addEventListener('resize', relayout, { passive: true });
-window.addEventListener('orientationchange', ()=> setTimeout(()=> iso.layout(), 50), { passive: true });
+// const relayout = debounce(()=> iso.layout(), 100);
+// window.addEventListener('resize', relayout, { passive: true });
+// window.addEventListener('orientationchange', ()=> setTimeout(()=> iso.layout(), 50), { passive: true });
 
 function attachImgHandlers(img){
   // 載入完成 → 淡入（不需要任何佔位圖）
