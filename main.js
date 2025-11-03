@@ -85,10 +85,11 @@ function initIsotope(){
     itemSelector: '.grid-item',
     percentPosition: true,
     masonry: { columnWidth: '.grid-sizer', gutter: '.gutter-sizer' },
-    transitionDuration: '180ms',
-    hiddenStyle:  { opacity: 0, transform: 'scale(0.98)' },
-    visibleStyle: { opacity: 1, transform: 'scale(1)' },
-    stagger: 12,
+    transitionDuration: '160ms',        // 稍短，利落不拖泥
+    hiddenStyle:  { opacity: 0 },       // 移除 scale 避免視覺「縮回去」的跳感
+    visibleStyle: { opacity: 1 },
+    stagger: 0,    
+    //stagger: 12,
     getSortData: {
       date: el => new Date(el.dataset.date || 0).getTime() || 0,
       title: el => (el.dataset.title || '').toLowerCase()
