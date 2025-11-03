@@ -3,6 +3,7 @@
   --bg:#0b0c10; --fg:#e6e6e6; --muted:#9aa0a6;
   --card:#11131a; --border:#23252e; --accent:#7aa2f7;
   --radius:12px; --shadow:0 8px 24px rgba(0,0,0,.25);
+  --gut:16px;
 }
 *{box-sizing:border-box}
 html,body{
@@ -180,26 +181,43 @@ a{color:inherit; text-decoration:none}
 }
 
 /* ===== Performance Tweaks ===== */
-/* 仍固定捲軸寬、容器不做高度動畫（保持不跳） */
-html { scrollbar-gutter: stable both-edges; }
-.grid { transition: none; will-change: height; }
 
-/* 卡片：只做 transform/opacity，交給 GPU 合成，避免子像素抖 */
-.grid-item {
+/* 版面基本值：可留 */
+:root{
+  --gut: 16px;
+}
+*{box-sizing:border-box}
+html{scrollbar-gutter: stable both-edges;} /* 捲軸寬固定，避免左右抖 */
+.grid{position:relative; /* 很重要：不要對 height 做動畫 */ }
+
+/* sizer / gutter 交給 Isotope */
+.grid-sizer{ width: calc((100% - 3 * var(--gut)) / 4); } /* 4欄示例 */
+.gutter-sizer{ width: var(--gut); }
+
+/* item 必須絕對定位（Isotope 會設），這裡只定義動畫 */
+.grid-item{
+  /* 你自己的外觀樣式可保留（卡片、陰影、邊框之類） */
+}
+
+/* ✅ 只動畫 transform（位移）+ 輕微透明度；不要寫 scale */
+.isotope-item{
+  transition:
+    transform 150ms cubic-bezier(.2,.6,.2,1),
+    opacity   150ms ease;
   will-change: transform, opacity;
   backface-visibility: hidden;
   transform: translateZ(0);
 }
 
-/* Isotope 的顯/隱動畫：位移微小、時間短、easing 柔和 */
-.isotope-item {
-  transition:
-    transform 120ms cubic-bezier(.2,.6,.2,1),
-    opacity   160ms ease;
-}
-
-/* 尊重減少動畫偏好 */
+/* （可選）偏好減少動畫者關掉 */
 @media (prefers-reduced-motion: reduce){
-  .isotope-item { transition: none !important; }
+  .isotope-item{ transition: none !important; }
 }
 
+/* RWD：示例（3 欄/2 欄），保持 sizer/gutter 是唯一寬度來源 */
+@media (max-width: 1023.98px){
+  .grid-sizer{ width: calc((100% - 2 * var(--gut)) / 3); }
+}
+@media (max-width: 719.98px){
+  .grid-sizer{ width: calc((100% - 1 * var(--gut)) / 2); }
+}

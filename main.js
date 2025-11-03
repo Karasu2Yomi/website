@@ -105,9 +105,9 @@ function initIsotope(){
     masonry: { columnWidth: '.grid-sizer', gutter: '.gutter-sizer' },
 
     // 關鍵：小位移 + 淡入；時間短；不使用 scale、不使用 stagger
-    transitionDuration: '120ms',
-    hiddenStyle:  { opacity: 0, transform: 'translateY(8px)' },
-    visibleStyle: { opacity: 1, transform: 'translateY(0)'   },
+    transitionDuration: '180ms',
+    //hiddenStyle:  { opacity: 0, transform: 'translateY(8px)' },
+    //visibleStyle: { opacity: 1, transform: 'translateY(0)'   },
     stagger: 0,
 
     getSortData: {
