@@ -29,7 +29,7 @@ async function loadData(){
     el.setAttribute('data-title', it.title);
     el.setAttribute('data-date', it.date);
     el.setAttribute('data-tags', (it.tags||[]).join(','));
-    const href = it.type==='blog' ? `/websitef/article.html?slug=${it.slug}` : it.href;
+    const href = it.type==='blog' ? `/website/article.html?slug=${it.slug}` : it.href;
 
     el.innerHTML = `
       <a class="card" href="${href}" ${/^https?:/.test(href)?'target="_blank" rel="noreferrer"':''}>
