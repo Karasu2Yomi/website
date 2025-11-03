@@ -1,128 +1,183 @@
+/* =========================
+   Base Theme
+   ========================= */
 :root{
   --bg:#0b0c10; --fg:#e6e6e6; --muted:#9aa0a6;
   --card:#11131a; --border:#23252e; --accent:#7aa2f7;
   --radius:12px; --shadow:0 8px 24px rgba(0,0,0,.25);
 }
+
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC","Hiragino Sans","Microsoft JhengHei",sans-serif}
+html,body{
+  margin:0;padding:0;background:var(--bg);color:var(--fg);
+  font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC","Hiragino Sans","Microsoft JhengHei",sans-serif;
+}
 a{color:inherit;text-decoration:none}
 .container{max-width:1100px;margin:0 auto;padding:0 20px}
 
-/* Header */
+/* =========================
+   Header
+   ========================= */
 .site-header{padding:40px 0 20px}
 .site-header h1{margin:0 0 8px;font-size:32px;letter-spacing:.4px}
 .subtitle{margin:0 0 8px;color:var(--muted)}
 .meta a{margin-right:12px;color:var(--accent)}
 
-/* 控制列 */
-.controls{display:grid;grid-template-columns:1fr auto;gap:12px;margin:12px auto 20px;align-items:center}
+/* =========================
+   Controls
+   ========================= */
+.controls{
+  display:grid;grid-template-columns:1fr auto;gap:12px;
+  margin:12px auto 20px;align-items:center;
+}
 .filters{display:flex;flex-wrap:wrap;gap:8px}
-.btn{padding:10px 14px;border:1px solid var(--border);background:#0d0f16;border-radius:999px;cursor:pointer;touch-action:manipulation}
+.btn{
+  padding:10px 14px;border:1px solid var(--border);
+  background:#0d0f16;border-radius:999px;cursor:pointer;touch-action:manipulation;
+}
 .btn:hover{border-color:var(--accent)}
 .btn.is-checked{background:var(--accent);color:#0c1022;border-color:transparent}
 .search-sort{display:flex;gap:8px;align-items:center}
-#search,#sort{padding:10px 12px;border:1px solid var(--border);background:#0d0f16;color:var(--fg);border-radius:10px;min-height:40px}
+#search,#sort{
+  padding:10px 12px;border:1px solid var(--border);
+  background:#0d0f16;color:var(--fg);border-radius:10px;min-height:40px;
+}
 
-/* Isotope: 使用 .grid-sizer + 百分比欄寬（RWD） */
-/* === 計算式 Masonry：欄寬與倍數 === */
-.grid {
-  position: relative;
-  transition: height .25s ease;
-  /* 預設（桌面）: 4 欄、16px 間距 */
+/* =========================
+   Masonry Grid (Isotope)
+   —— 寬度含間隔整倍數；高度用 padding-top 佔位（穩定）
+   ========================= */
+.grid{
+  position:relative;transition:height .25s ease;padding:4px 0;
+
+  /* PC 預設：4 欄 + 16px 間距 */
   --cols: 4;
   --gut: 16px;
+
+  /* 單欄寬（扣除所有間距後平均分配） */
   --colw: calc((100% - (var(--cols) - 1) * var(--gut)) / var(--cols));
-  padding: 4px 0;
+
+  /* 縮圖基準比例（16:10 → 62.5%） */
+  --thumb-pct: 62.5%;
+  /* 高度倍數：h2/h3 在此以更高的 padding 百分比實現（穩定、不壓縮） */
+  --thumb-pct-h2: 100%;   /* 視覺更高 */
+  --thumb-pct-h3: 140%;
 }
 
-/* sizer 交給 Isotope 讀取：列寬與間距 */
-.grid-sizer, .grid-item { width: var(--colw); }
-.gutter-sizer { width: var(--gut); }
+/* sizer 給 Isotope 讀取 */
+.grid-sizer, .grid-item{ width: var(--colw); }
+.gutter-sizer{ width: var(--gut); }
 
-/* 上下間距用倍數（= 水平間距），Isotope 會計入高度 */
-.grid-item { margin-bottom: var(--gut); will-change: transform, opacity; }
-
-/* —— 寬度倍數：含中間間隔 —— */
-/* w2 = 2 欄 + 1 個間隔；w3 = 3 欄 + 2 個間隔 */
-.grid-item--w2 { width: calc(2 * var(--colw) + 1 * var(--gut)); }
-.grid-item--w3 { width: calc(3 * var(--colw) + 2 * var(--gut)); }
-
-/* —— 高度倍數：以比例實現（基準 16:10） —— */
-.thumb { aspect-ratio: 16 / 10; }
-.grid-item--h2 .thumb { aspect-ratio: 16 / 20; } /* 高度×2 */
-.grid-item--h3 .thumb { aspect-ratio: 16 / 30; } /* 高度×3 */
-
-/* 類型預設比例（可留著強化視覺差異） */
-.grid-item[data-type="project"] .thumb { aspect-ratio: 4 / 3; }
-.grid-item[data-type="blog"]    .thumb { aspect-ratio: 16 / 9; }
-
-/* —— 斷點：讓 cols 與 gut 成倍改變，並避免小螢幕超寬 —— */
-/* 平板：3 欄、12px */
-@media (min-width: 720px) and (max-width: 1023.98px){
-  .grid { --cols: 3; --gut: 12px; --colw: calc((100% - (var(--cols) - 1) * var(--gut)) / var(--cols)); }
-  /* 兩欄時 w3 會超出，直接收斂 */
-  .grid-item--w3 { width: 100% !important; }
+/* 垂直間距 = gutter，Isotope 會計入高度 */
+.grid-item{
+  margin-bottom: var(--gut);
+  will-change: transform, opacity;
+  transition: transform .18s ease, opacity .18s ease;
 }
 
-/* 手機：2 欄、12px（或想更穩可改成 1 欄，見下個 media） */
-@media (max-width: 719.98px){
-  .grid { --cols: 2; --gut: 12px; --colw: calc((100% - (var(--cols) - 1) * var(--gut)) / var(--cols)); }
-  /* cols=2 時，w2 公式剛好 = 100%（2*colw + 1*gut = 100%），OK；
-     w3 不存在，強制收斂。 */
-  .grid-item--w3 { width: 100% !important; }
-}
+/* —— 寬度倍數（含中間間隔） —— */
+.grid-item--w2{ width: calc(2 * var(--colw) + 1 * var(--gut)); }
+.grid-item--w3{ width: calc(3 * var(--colw) + 2 * var(--gut)); }
 
-/* 若你想在最小螢幕完全保險：改成 1 欄、12px（擇一） */
-@media (max-width: 479.98px){
-  .grid { --cols: 1; --gut: 12px; --colw: calc((100% - (var(--cols) - 1) * var(--gut)) / var(--cols)); }
-  .grid-item--w2, .grid-item--w3 { width: 100% !important; }
+/* =========================
+   Card
+   ========================= */
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;height:auto;
+  transition:transform .2s ease,border-color .2s ease;
 }
-/* 其他樣式保持不變（card/thumb/hero…） */
-
-/* 卡片 */
-.card{display:block;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform .2s ease,border-color .2s ease}
 .card:hover{transform:translateY(-2px);border-color:var(--accent)}
-.card-body{padding:14px 14px 12px}
-.card-body h3{margin:0 0 6px;font-size:18px;letter-spacing:.2px}
-.desc{margin:0 0 10px;color:var(--muted)}
-.meta-list{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:10px;color:var(--muted);font-size:13px}
 
-
-/* 圖片容器：純 CSS 骨架（不使用任何佔位圖） */
-.thumb,.hero{
+/* 縮圖：用 padding-top 佔位，圖片絕對定位鋪滿（更穩定） */
+.thumb{
   position:relative;overflow:hidden;border-radius:12px;box-shadow:var(--shadow);
-  aspect-ratio:16/9; /* hero 會覆蓋比例 */
+  /* 骨架動畫（純 CSS） */
   background:linear-gradient(90deg,#14161d 25%,#1b1f2a 50%,#14161d 75%);
   background-size:200% 100%;animation:skeleton 1.1s linear infinite;
 }
-.hero{ aspect-ratio:21/9 } /* 題圖更寬的視覺 */
 @keyframes skeleton{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-.thumb>img,.hero>img{
+/* 基準高度（16:10） */
+.thumb::before{
+  content:"";display:block;padding-top:var(--thumb-pct);
+}
+/* 高度倍數（用更高的 padding 百分比） */
+.grid-item--h2 .thumb::before{ padding-top: var(--thumb-pct-h2); }
+.grid-item--h3 .thumb::before{ padding-top: var(--thumb-pct-h3); }
+
+/* 圖片鋪滿容器，載入後淡入 */
+.thumb>img{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   opacity:0;transition:opacity .25s ease;display:block;
 }
-.img-loaded{opacity:1 !important;}    /* JS 在 load 時加上，淡入 */
+.thumb>img.img-loaded{opacity:1 !important}
 
-/* 失敗時（JS 僅加上 .is-error，不用任何圖片） */
-.thumb.is-error::before,.hero.is-error::before{
-  content:"No Image";
-  position:absolute;inset:0;display:grid;place-items:center;
-  color:#9aa0a6;font-size:14px;letter-spacing:.08em;
+/* 失敗（不載入外部佔位圖） */
+.thumb.is-error::before{
+  content:"No Image";display:grid;place-items:center;
+  position:absolute;inset:0;color:#9aa0a6;font-size:14px;letter-spacing:.08em;
   background:linear-gradient(180deg,#151823 0%,#11131a 100%);
   border:1px dashed #2a2f3a;border-radius:12px;
 }
 
-/* 文章頁 */
+/* 文字區：固定高度，避免把卡片撐壞（與 PC 設計對齊） */
+.card-body{
+  flex:0 0 88px; /* 可視覺微調 → 96/104 皆可 */
+  padding:14px 14px 12px;
+  display:grid;grid-template-rows:auto auto 1fr;row-gap:10px;
+}
+.card-body h3{
+  margin:0;font-size:18px;letter-spacing:.2px;
+  display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;
+}
+.desc{
+  margin:0;color:var(--muted);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.meta-list{
+  list-style:none;padding:0;margin:0;
+  display:flex;flex-wrap:wrap;gap:10px;color:var(--muted);font-size:13px;
+}
+
+/* 類型視覺差異（可視需要微調） */
+.grid-item[data-type="project"] .thumb{ /* 可加入微妙遮色片等視覺差異 */ }
+.grid-item[data-type="blog"]    .thumb{}
+
+/* =========================
+   Article Page (Hero / TOC)
+   ========================= */
 .post-hero{margin:32px 0 24px}
 .post-hero .container{max-width:1100px;margin:0 auto;padding:0 20px}
+
+/* Hero 脫離卡片規則，使用固定高度範圍（不壓縮） */
+.post-hero .hero{
+  position:relative;overflow:hidden;border-radius:var(--radius);box-shadow:var(--shadow);
+  height: clamp(220px, 35vw, 420px);
+  background:linear-gradient(90deg,#14161d 25%,#1b1f2a 50%,#14161d 75%);
+  background-size:200% 100%;animation:skeleton 1.1s linear infinite;
+}
+.post-hero .hero>img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity .25s ease;display:block;
+}
+.post-hero .hero>img.img-loaded{opacity:1}
+
 .post-layout{display:grid;gap:24px;grid-template-columns:1fr}
-@media (min-width:992px){.post-layout{grid-template-columns:220px 1fr}}
-.post-content{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+@media (min-width:992px){ .post-layout{grid-template-columns:220px 1fr} }
+
+.post-content{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);
+}
 .post-content img{max-width:100%;height:auto;border-radius:10px}
 
 /* TOC */
-.toc{position:sticky;top:16px;align-self:start;background:#0d0f16;border:1px solid var(--border);border-radius:10px;padding:12px}
+.toc{
+  position:sticky;top:16px;align-self:start;background:#0d0f16;
+  border:1px solid var(--border);border-radius:10px;padding:12px;
+}
 .toc h3{margin:0 0 8px;font-size:14px;color:var(--muted)}
 .toc ul{list-style:none;padding:0;margin:0}
 .toc li{margin:6px 0;font-size:14px}
@@ -130,17 +185,33 @@ a{color:inherit;text-decoration:none}
 .toc a{color:var(--accent)}
 .back-link{color:var(--accent)}
 
-/* Lightbox */
+/* =========================
+   Lightbox
+   ========================= */
 .lightbox{position:fixed;inset:0;display:none}
 .lightbox.show{display:block;z-index:9999}
 .lightbox-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.8)}
-.lightbox-img{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);max-width:92vw;max-height:92vh;border-radius:12px}
-.lightbox-close{position:absolute;top:16px;right:20px;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:999px;font-size:24px;width:40px;height:40px;cursor:pointer}
+.lightbox-img{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  max-width:92vw;max-height:92vh;border-radius:12px;
+}
+.lightbox-close{
+  position:absolute;top:16px;right:20px;background:transparent;color:#fff;
+  border:1px solid rgba(255,255,255,.4);border-radius:999px;font-size:24px;width:40px;height:40px;cursor:pointer;
+}
 
-/* Footer */
-.site-footer{padding:48px 0;color:var(--muted);text-align:center;border-top:1px solid var(--border);margin-top:40px}
+/* =========================
+   Footer
+   ========================= */
+.site-footer{
+  padding:48px 0;color:var(--muted);text-align:center;
+  border-top:1px solid var(--border);margin-top:40px;
+}
 
-/* 手機優化 */
+/* =========================
+   Responsive
+   ========================= */
+/* 平板：2 欄 / 14px 間距（你要求的 2 欄） */
 @media (min-width:720px) and (max-width:1023.98px){
   .grid{
     --cols: 2;
@@ -174,3 +245,22 @@ a{color:inherit;text-decoration:none}
 /* 圖片載入完成後，關掉骨架背景與動畫 */
 .thumb.is-loaded { background: none; animation: none; }
 .post-hero .hero.is-loaded { background: none; animation: none; }
+
+/* （可選）降低系統偏好下骨架動畫 */
+@media (prefers-reduced-motion: reduce) {
+  .thumb, .hero { animation: none !important; }
+}
+
+.thumb > img.img-loaded,
+.hero  > img.img-loaded {
+  opacity: 1;               /* 關鍵：比 .thumb>img 更高的 specificity */
+}
+
+.thumb.is-loaded { background: none; animation: none; }
+.post-hero .hero.is-loaded { background: none; animation: none; }
+
+.thumb { position: relative; }
+.thumb::before { position: relative; z-index: 0; }  /* 只負責占位，不蓋圖 */
+.thumb > img { position: absolute; inset: 0; z-index: 1; }  /* 圖一定在上層 */
+
+.thumb.is-error::before { position: absolute; inset: 0; z-index: 2; } /* 只有 error 才覆蓋 */
