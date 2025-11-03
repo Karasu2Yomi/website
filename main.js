@@ -49,7 +49,7 @@ async function loadDataAndRender() {
     if (it.size === 'h3') el.classList.add('grid-item--h3');
 
     const href = it.type === 'blog'
-      ? `/article.html?slug=${it.slug}`
+      ? `/website/article.html?slug=${it.slug}`
       : (it.href || '#');
 
     el.innerHTML = `
