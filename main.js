@@ -1,217 +1,129 @@
-// ===== Utils =====
-function debounce(fn, wait = 120){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), wait); }; }
+const PLACEHOLDER_CSS_ONLY = true; // 僅用 CSS 骨架，不使用佔位圖
 
-function arrangeWithoutTransitions(args){
-  const prev = iso.options.transitionDuration;
-  iso.options.transitionDuration = 0;           // 暫時關閉位移動畫（瞬排）
-  iso.arrange(args);
-  iso.once('arrangeComplete', () => {
-    iso.options.transitionDuration = prev;      // 排完恢復
-  });
-}
+function debounce(fn, wait=120){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), wait); }; }
+const relayout = debounce(()=> iso.layout(), 100);
+window.addEventListener('resize', relayout, { passive: true });
+window.addEventListener('orientationchange', ()=> setTimeout(()=> iso.layout(), 50), { passive: true });
 
-function arrangeSoft(args){
-  const prev = iso.options.transitionDuration;
-  iso.options.transitionDuration = '120ms'; // 保持短促、統一
-  iso.arrange(args);
-  iso.once('arrangeComplete', () => { iso.options.transitionDuration = prev; });
-}
-
-
-
-// 圖片事件：成功→淡入並關骨架；失敗→顯示錯誤層
 function attachImgHandlers(img){
-  const parent = img.closest('.thumb, .hero');
-  const show = () => {
-    img.classList.add('img-loaded');
-    if (parent) { parent.classList.add('is-loaded'); parent.classList.remove('is-error'); }
-    img.style.removeProperty('display');
-    img.style.removeProperty('visibility');
-    img.style.removeProperty('opacity');
-  };
-  const fail = () => {
-    if (parent) parent.classList.add('is-error');
-    img.style.display = 'none';
-  };
+  // 載入完成 → 淡入（不需要任何佔位圖）
+  const show = ()=> img.classList.add('img-loaded');
+  if (img.complete && img.naturalWidth>0) show();
+  else img.addEventListener('load', show, {once:true});
 
-  img.addEventListener('load', show, { once:true });
-  img.addEventListener('error', fail, { once:true });
-
-  if (img.complete){
-    if (img.naturalWidth > 0){
-      (img.decode ? img.decode().then(show).catch(show) : show());
-    } else {
-      (img.decode ? img.decode().then(show).catch(fail) : fail());
-    }
-  }
+  // 失敗 → 套 CSS 樣式（不載入任何圖）
+  img.addEventListener('error', ()=>{
+    const box = img.parentElement; // .thumb
+    box.classList.add('is-error');
+    img.style.display='none'; // 避免瀏覽器破圖圖示
+  }, {once:true});
 }
 
-// ===== Data → DOM (示例；若你已自行渲染可不用) =====
-async function loadDataAndRender(){
+async function loadData(){
   const res = await fetch('data.json?ts=' + Date.now());
-  if (!res.ok) throw new Error('data.json load failed');
   const items = await res.json();
-
   const grid = document.querySelector('.grid');
   const frag = document.createDocumentFragment();
 
-  items.forEach(it => {
-    const el = document.createElement('article');
-    el.className = 'grid-item';
-    el.dataset.type  = it.type || '';
-    el.dataset.title = it.title || '';
-    el.dataset.date  = it.date  || '';
-    el.dataset.tags  = (it.tags || []).join(',');
-
+  items.forEach(it=>{
+    const el=document.createElement('article');
+    el.className='grid-item';
+    el.setAttribute('data-type', it.type);
+    el.setAttribute('data-title', it.title);
+    el.setAttribute('data-date', it.date);
+    el.setAttribute('data-tags', (it.tags||[]).join(','));
+    
     if (it.size === 'w2') el.classList.add('grid-item--w2');
     if (it.size === 'w3') el.classList.add('grid-item--w3');
-    if (it.tall === true || it.size === 'h2') el.classList.add('grid-item--h2');
-    if (it.size === 'h3') el.classList.add('grid-item--h3');
+    if (it.tall === true) el.classList.add('grid-item--h2');
 
-    const href = it.type === 'blog' ? `/website/article.html?slug=${it.slug}` : (it.href || '#');
+    const href = it.type==='blog' ? `/website/article.html?slug=${it.slug}` : it.href;
 
     el.innerHTML = `
-      <a class="card" href="${href}" ${/^https?:/.test(href) ? 'target="_blank" rel="noreferrer"' : ''}>
+      <a class="card" href="${href}" ${/^https?:/.test(href)?'target="_blank" rel="noreferrer"':''}>
         <div class="thumb">
-          <img src="${it.thumb || ''}" alt="${(it.title || '').replace(/"/g,'&quot;')}">
+          <img src="${it.thumb||''}" alt="${it.title}">
         </div>
         <div class="card-body">
-          <h3>${it.title || ''}</h3>
+          <h3>${it.title}</h3>
           <p class="desc">${it.excerpt || ''}</p>
           <ul class="meta-list">
-            <li>Tags: ${(it.tags || []).join(', ')}</li>
-            <li>${it.type === 'project' ? 'Updated' : 'Published'}: ${it.date || ''}</li>
+            <li>Tags: ${(it.tags||[]).join(', ')}</li>
+            <li>${it.type==='project'?'Updated':'Published'}: ${it.date}</li>
           </ul>
         </div>
-      </a>
-    `;
-    el.querySelectorAll('img').forEach(attachImgHandlers);
-    frag.appendChild(el);
-  });
-
-  grid.appendChild(frag);
-}
-
-// ===== Isotope =====
-let iso = null;
-
-function initIsotope(){
-  const grid = document.querySelector('.grid');
-  if (!grid) return;
-
-  iso = new Isotope(grid, {
-    itemSelector: '.grid-item',
-    percentPosition: true,
-    masonry: { columnWidth: '.grid-sizer', gutter: '.gutter-sizer' },
-
-    transitionDuration: '140ms',
-    hiddenStyle:  { opacity: 0 }, // 不要寫 transform
-    visibleStyle: { opacity: 1 }, // 不要寫 transform
-    stagger: 0,
-
-    getSortData: {
-      date: el => new Date(el.dataset.date || 0).getTime() || 0,
-      title: el => (el.dataset.title || '').toLowerCase()
-    },
-    sortBy: 'date',
-    sortAscending: { date:false, title:true }
-  });
-
-  /* Controls */
-  let currentFilter = '*';
-  let currentQuery  = '';
-
-  const compositeFilter = (el) => {
-    const passFilter = currentFilter === '*' ? true : el.matches(currentFilter);
-    if (!passFilter) return false;
-    if (!currentQuery) return true;
-    const hay = ((el.dataset.title || '') + ' ' + (el.dataset.tags || '') + ' ' + (el.querySelector('.desc')?.textContent || '')).toLowerCase();
-    return hay.includes(currentQuery);
-  };
-
-  document.querySelectorAll('.filters .btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.filters .btn').forEach(b => b.classList.remove('is-checked'));
-      btn.classList.add('is-checked');
-      currentFilter = btn.getAttribute('data-filter') || '*';
-      //iso.arrange({ filter: compositeFilter });
-      arrangeSoft({ filter: compositeFilter });
-    });
-  });
-
-  const searchInput = document.getElementById('search');
-  if (searchInput){
-    searchInput.addEventListener('input', debounce(()=>{
-      currentQuery = (searchInput.value || '').trim().toLowerCase();
-      //iso.arrange({ filter: compositeFilter });
-      arrangeSoft({ filter: compositeFilter });
-    }, 150));
-  }
-
-  const sortSelect = document.getElementById('sort');
-  if (sortSelect){
-    sortSelect.addEventListener('change', ()=>{
-      const v = sortSelect.value;
-      const opt =
-        v === 'date-desc'  ? { sortBy:'date',  sortAscending:false } :
-        v === 'date-asc'   ? { sortBy:'date',  sortAscending:true  } :
-        v === 'title-asc'  ? { sortBy:'title', sortAscending:true  } :
-                            { sortBy:'title', sortAscending:false };
-      arrangeSoft(opt);
-    });
-  }
-
-  const relayout = debounce(()=> iso.layout(), 100);
-  window.addEventListener('resize', relayout, { passive:true });
-  window.addEventListener('orientationchange', ()=> setTimeout(()=> iso.layout(), 50), { passive:true });
-}
-
-// 動態追加（可選）
-function appendItems(newItems){
-  const grid = document.querySelector('.grid');
-  const frag = document.createDocumentFragment();
-  const elems = [];
-
-  newItems.forEach(it => {
-    const el = document.createElement('article');
-    el.className = 'grid-item';
-    el.dataset.type  = it.type || '';
-    el.dataset.title = it.title || '';
-    el.dataset.date  = it.date  || '';
-    el.dataset.tags  = (it.tags || []).join(',');
-    if (it.size === 'w2') el.classList.add('grid-item--w2');
-    if (it.size === 'w3') el.classList.add('grid-item--w3');
-    if (it.tall === true || it.size === 'h2') el.classList.add('grid-item--h2');
-    if (it.size === 'h3') el.classList.add('grid-item--h3');
-
-    const href = it.type === 'blog' ? `/website/article.html?slug=${it.slug}` : (it.href || '#');
-
-    el.innerHTML = `
-      <a class="card" href="${href}">
-        <div class="thumb"><img src="${it.thumb || ''}" alt="${(it.title || '').replace(/"/g,'&quot;')}"></div>
-        <div class="card-body">
-          <h3>${it.title || ''}</h3>
-          <p class="desc">${it.excerpt || ''}</p>
-          <ul class="meta-list"><li>Tags: ${(it.tags || []).join(', ')}</li><li>${it.date || ''}</li></ul>
-        </div>
       </a>`;
+    // 圖片事件
     el.querySelectorAll('img').forEach(attachImgHandlers);
     frag.appendChild(el);
-    elems.push(el);
   });
 
   grid.appendChild(frag);
-  imagesLoaded(elems, () => { iso.appended(elems); iso.arrange(); });
 }
 
-// ===== Bootstrap =====
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', async ()=>{
   const grid = document.querySelector('.grid');
-  const hasPreRendered = grid && grid.querySelector('.grid-item');
+  const filterButtons = document.querySelectorAll('.filters .btn');
+  const searchInput = document.getElementById('search');
+  const sortSelect = document.getElementById('sort');
 
-  if (!hasPreRendered) await loadDataAndRender();
-  imagesLoaded(grid, () => initIsotope());
+  await loadData(); // 先渲染
+
+  imagesLoaded(grid, ()=>{ // 再初始化 Isotope
+    const iso = new Isotope(grid, {
+      itemSelector: '.grid-item',
+      percentPosition: true,
+      masonry: {
+        columnWidth: '.grid-sizer',
+        gutter: '.gutter-sizer'   
+      },
+      transitionDuration: '180ms',         // 短一點順眼
+      hiddenStyle:  { opacity: 0, transform: 'scale(0.98)' },
+      visibleStyle: { opacity: 1, transform: 'scale(1)'    },
+      stagger: 12,                          // 交錯顯示（毫秒）
+
+      getSortData: {
+        date: el => new Date(el.getAttribute('data-date')).getTime() || 0,
+        title: el => (el.getAttribute('data-title')||'').toLowerCase()
+      },
+      sortBy: 'date',
+      sortAscending: { date:false, title:true }
+    });
+
+    let currentFilter='*', currentQuery='';
+
+    const compositeFilter = (el)=>{
+      const passBtn = currentFilter==='*' ? true : el.matches(currentFilter);
+      if(!passBtn) return false;
+      if(!currentQuery) return true;
+      const t=(el.getAttribute('data-title')||'').toLowerCase();
+      const g=(el.getAttribute('data-tags')||'').toLowerCase();
+      const d=(el.querySelector('.desc')?.textContent||'').toLowerCase();
+      return (t+' '+g+' '+d).includes(currentQuery);
+    };
+
+    filterButtons.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        filterButtons.forEach(b=>b.classList.remove('is-checked'));
+        btn.classList.add('is-checked');
+        currentFilter = btn.getAttribute('data-filter') || '*';
+        iso.arrange({ filter: compositeFilter });
+      });
+    });
+
+    searchInput?.addEventListener('input', debounce(()=>{
+      currentQuery = searchInput.value.trim().toLowerCase();
+      iso.arrange({ filter: compositeFilter });
+    }, 150));
+
+    sortSelect?.addEventListener('change', ()=>{
+      const v=sortSelect.value;
+      if (v==='date-desc') iso.arrange({sortBy:'date',sortAscending:false});
+      if (v==='date-asc')  iso.arrange({sortBy:'date',sortAscending:true});
+      if (v==='title-asc') iso.arrange({sortBy:'title',sortAscending:true});
+      if (v==='title-desc')iso.arrange({sortBy:'title',sortAscending:false});
+    });
+
+    // 若日後需要動態追加：請先 append 到 DOM → 對新元素 imagesLoaded → iso.appended(newElems) → iso.arrange()
+  });
 });
-
-// 可在其他腳本使用
-window.appendItems = appendItems;

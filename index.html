@@ -5,7 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>你的名稱｜Portfolio & Blog</title>
   <link rel="stylesheet" href="styles.css" />
-  
+  <!-- Isotope + imagesLoaded -->
+  <script defer src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+  <script defer src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+  <script defer src="main.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -53,9 +56,5 @@
     <div class="container">© <span id="y"></span> 你的名稱</div>
   </footer>
   <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
-  <!-- Isotope + imagesLoaded -->
-  <script defer src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
-  <script defer src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
-  <script defer src="main.js"></script>
 </body>
 </html>
