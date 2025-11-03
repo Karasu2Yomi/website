@@ -188,7 +188,10 @@ a{color:inherit; text-decoration:none}
 }
 *{box-sizing:border-box}
 html{scrollbar-gutter: stable both-edges;} /* 捲軸寬固定，避免左右抖 */
-.grid{position:relative; /* 很重要：不要對 height 做動畫 */ }
+.grid{
+  position:relative; /* 很重要：不要對 height 做動畫 */ 
+  overflow-anchor: none;
+}
 
 /* sizer / gutter 交給 Isotope */
 .grid-sizer{ width: calc((100% - 3 * var(--gut)) / 4); } /* 4欄示例 */
@@ -197,6 +200,12 @@ html{scrollbar-gutter: stable both-edges;} /* 捲軸寬固定，避免左右抖 
 /* item 必須絕對定位（Isotope 會設），這裡只定義動畫 */
 .grid-item{
   /* 你自己的外觀樣式可保留（卡片、陰影、邊框之類） */
+  transition:
+    transform 140ms cubic-bezier(.2,.6,.2,1),
+    opacity   160ms ease;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 /* ✅ 只動畫 transform（位移）+ 輕微透明度；不要寫 scale */
