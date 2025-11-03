@@ -25,5 +25,15 @@
     "tags": ["Web","Frontend","Isotope"],
     "thumb": "/assets/isotope-thumb.jpg",
     "excerpt": "用 Markdown + Isotope 打造作品集與部落格。"
+  },
+  {
+    "type": "blog",
+    "size": "w2",
+    "title": "Hello World",
+    "slug": "hello-world",
+    "date": "2025-10-20",
+    "tags": ["Web","Frontend","Isotope"],
+    "thumb": "/assets/isotope-thumb.jpg",
+    "excerpt": "用 Markdown + Isotope 打造作品集與部落格。"
   }
 ]

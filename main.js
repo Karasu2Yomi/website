@@ -1,6 +1,9 @@
 const PLACEHOLDER_CSS_ONLY = true; // 僅用 CSS 骨架，不使用佔位圖
 
-function debounce(fn, wait=120){ let t; return (...a)=>{clearTimeout(t); t=setTimeout(()=>fn(...a),wait);} }
+function debounce(fn, wait=120){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), wait); }; }
+const relayout = debounce(()=> iso.layout(), 100);
+window.addEventListener('resize', relayout, { passive: true });
+window.addEventListener('orientationchange', ()=> setTimeout(()=> iso.layout(), 50), { passive: true });
 
 function attachImgHandlers(img){
   // 載入完成 → 淡入（不需要任何佔位圖）
@@ -29,6 +32,11 @@ async function loadData(){
     el.setAttribute('data-title', it.title);
     el.setAttribute('data-date', it.date);
     el.setAttribute('data-tags', (it.tags||[]).join(','));
+    
+    if (it.size === 'w2') el.classList.add('grid-item--w2');
+    if (it.size === 'w3') el.classList.add('grid-item--w3');
+    if (it.tall === true) el.classList.add('grid-item--h2');
+
     const href = it.type==='blog' ? `/website/article.html?slug=${it.slug}` : it.href;
 
     el.innerHTML = `

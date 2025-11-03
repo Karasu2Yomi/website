@@ -25,19 +25,23 @@ a{color:inherit;text-decoration:none}
 
 /* Isotope: 使用 .grid-sizer + 百分比欄寬（RWD） */
 /* 欄寬：2/3/4 欄；gutter 用 px 控制 */
-.grid { position: relative; transition: height .25s ease; padding: 4px 0; } /* 讓左右也不會貼邊 */
-.grid-sizer, .grid-item { width: 50%; }                   /* 手機：2欄 */
-.gutter-sizer { width: 12px; }                             /* 手機間距 */
-.grid-item { will-change: transform, opacity; }  /* 減少抖動、撕裂 */
+.grid { position: relative; transition: height .25s ease; padding: 4px 0; }
+.grid-sizer, .grid-item { width: 50%; }     /* 手機：2欄 */
+.gutter-sizer { width: 12px; }               /* 手機水平間距 */
+
+/* 垂直間距（讓卡片之間有上下空隙） */
+.grid-item { margin-bottom: 12px; will-change: transform, opacity; }
+
 @media (min-width: 720px){
-  .grid-sizer, .grid-item { width: 33.3333%; }            /* 平板：3欄 */
-  .gutter-sizer { width: 14px; }                           /* 平板間距 */
+  .grid-sizer, .grid-item { width: 33.3333%; }  /* 平板：3欄 */
+  .gutter-sizer { width: 14px; }
+  .grid-item { margin-bottom: 14px; }           /* 平板的上下間距 */
 }
 @media (min-width: 1024px){
-  .grid-sizer, .grid-item { width: 25%; }                  /* 桌機：4欄 */
-  .gutter-sizer { width: 16px; }                           /* 桌機間距 */
+  .grid-sizer, .grid-item { width: 25%; }       /* 桌機：4欄 */
+  .gutter-sizer { width: 16px; }
+  .grid-item { margin-bottom: 16px; }           /* 桌機的上下間距 */
 }
-
 /* 其他樣式保持不變（card/thumb/hero…） */
 
 /* 卡片 */
@@ -48,6 +52,22 @@ a{color:inherit;text-decoration:none}
 .desc{margin:0 0 10px;color:var(--muted)}
 .meta-list{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:10px;color:var(--muted);font-size:13px}
 
+/* 基礎比例（讓卡更像卡片而非超扁） */
+.thumb { aspect-ratio: 16 / 10; }
+
+/* 類型預設比例（依需求可調） */
+.grid-item[data-type="project"] .thumb { aspect-ratio: 4 / 3; }   /* 專案偏高 */
+.grid-item[data-type="blog"]    .thumb { aspect-ratio: 16 / 9; }  /* 文章偏寬 */
+
+/* 寬度變體（桌面啟用；小螢幕收斂掉） */
+@media (min-width: 1024px){
+  .grid-item--w2 { width: 50%; }   /* 佔兩欄（單欄是 25%） */
+  .grid-item--w3 { width: 75%; }   /* 佔三欄（可選） */
+}
+
+/* 高度變體（用更高比例做出視覺高度加倍） */
+.grid-item--h2 .thumb { aspect-ratio: 4 / 5; }
+.grid-item--h3 .thumb { aspect-ratio: 2 / 3; }
 /* 圖片容器：純 CSS 骨架（不使用任何佔位圖） */
 .thumb,.hero{
   position:relative;overflow:hidden;border-radius:12px;box-shadow:var(--shadow);
@@ -111,4 +131,17 @@ a{color:inherit;text-decoration:none}
   #search{flex:1}
   .post-hero .container{padding:0 14px}
   .post-content{padding:16px}
+}
+/* 手機：單欄填滿，沒有空缺 */
+@media (max-width: 719.98px){
+  .grid-sizer, .grid-item { width: 100%; }
+  .gutter-sizer { width: 12px; }               /* 保留一點水平間距 */
+  .grid-item--w2, .grid-item--w3 { width: 100% !important; } /* 禁用寬變體 */
+}
+
+/* 平板：兩欄；同樣禁用寬變體避免洞 */
+@media (min-width: 720px) and (max-width: 1023.98px){
+  .grid-sizer, .grid-item { width: 50%; }
+  .gutter-sizer { width: 12px; }
+  .grid-item--w2, .grid-item--w3 { width: 100% !important; }
 }
