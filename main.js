@@ -123,7 +123,10 @@ function initIsotope(){
       document.querySelectorAll('.filters .btn').forEach(b => b.classList.remove('is-checked'));
       btn.classList.add('is-checked');
       currentFilter = btn.getAttribute('data-filter') || '*';
-      iso.arrange({ filter: compositeFilter });
+      const gridEl = document.querySelector('.grid');
+      lockGridHeight(gridEl);
+      iso.arrange({ filter: compositeFilter /* 或你的其他參數 */ });
+      iso.once('arrangeComplete', () => unlockGridHeight(gridEl));
     });
   });
 
@@ -131,7 +134,10 @@ function initIsotope(){
   if (searchInput){
     searchInput.addEventListener('input', debounce(()=>{
       currentQuery = (searchInput.value || '').trim().toLowerCase();
-      iso.arrange({ filter: compositeFilter });
+      const gridEl = document.querySelector('.grid');
+      lockGridHeight(gridEl);
+      iso.arrange({ filter: compositeFilter /* 或你的其他參數 */ });
+      iso.once('arrangeComplete', () => unlockGridHeight(gridEl));
     }, 150));
   }
 
