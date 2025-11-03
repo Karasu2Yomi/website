@@ -227,3 +227,84 @@ a{color:inherit;text-decoration:none}
   }
   .grid-item--w2, .grid-item--w3{ width:100% !important; }
 }
+
+/* ========== HOTFIX 1：卡片高度交回內容，自適應，不再固定外層高度 ========== */
+
+/* 取消固定高度（先前的 height: var(--rowh) 以及 --h2/--h3 的 height 全部撤銷） */
+.grid-item { height: auto !important; }
+
+/* 高度倍數：改由縮圖比例控制，而不是外層高度硬塞 */
+.thumb { aspect-ratio: 16 / 10; }              /* 基準卡片比例 */
+.grid-item--h2 .thumb { aspect-ratio: 16 / 20; }  /* 視覺更高（≈ 1.25x）*/
+.grid-item--h3 .thumb { aspect-ratio: 16 / 30; }  /* 視覺更高（≈ 1.5x）*/
+
+/* 文字區固定高度，避免把卡片撐破（可微調這個高度以配合你的字數） */
+.card { display: flex; flex-direction: column; height: auto; }
+.card-body {
+  flex: 0 0 88px;              /* 與先前 --body-h 對齊；可改 96/104 做微調 */
+  padding: 14px 14px 12px;
+  display: grid;
+  grid-template-rows: auto auto 1fr; 
+  row-gap: 10px;
+}
+.card-body h3 {
+  margin: 0;
+  display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+}
+.desc {
+  margin: 0; color: var(--muted);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+/* 類型差異保留（只做視覺，不再改外層高度） */
+.grid-item[data-type="project"] .thumb { /* project 可偏高些（已由 h2/h3 控） */ }
+.grid-item[data-type="blog"] .thumb    { /* blog 偏寬（基準 16/10 已足夠） */ }
+
+/* ========== HOTFIX 2：Hero 與卡片縮圖脫鉤，避免被壓縮 ========== */
+
+/* 文章頁 Hero 使用獨立尺寸，不吃 .thumb/.hero 共用的 flex 行為 */
+.post-hero .hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  /* 給一個響應式高度範圍：桌面上限 420px，手機不會太矮 */
+  height: clamp(220px, 35vw, 420px);
+}
+
+/* Hero 圖片鋪滿容器，高度自適應，不會被拉扁 */
+.post-hero .hero > img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0; transition: opacity .25s ease;
+}
+.post-hero .hero > img.img-loaded { opacity: 1; }
+
+/* 移除會影響 Hero 的「骨架 flex:1」等共用規則 */
+.post-hero .hero { flex: none !important; background: none; animation: none; }
+
+/* ========== HOTFIX 3：平板要兩欄（你提到只有一欄的情況） ========== */
+
+/* 依然使用先前的等式：寬度含間隔的整倍數，這裡只確保平板是 2 欄 */
+@media (min-width: 720px) and (max-width: 1023.98px){
+  .grid{
+    --cols: 2;
+    --gut: 14px;
+    --colw: calc((100% - (var(--cols) - 1) * var(--gut)) / var(--cols));
+    /* 不再計算 --rowh，因為我們不固定外層高度了 */
+  }
+  /* w3 在兩欄時無意義，保守收斂為整列寬 */
+  .grid-item--w3 { width: 100% !important; }
+}
+
+/* 手機 1 欄（維持既有），確保不會出洞 */
+@media (max-width: 719.98px){
+  .grid{
+    --cols: 1;
+    --gut: 12px;
+    --colw: calc((100% - (var(--cols) - 1) * var(--gut)) / var(--cols));
+  }
+  .grid-item--w2, .grid-item--w3 { width: 100% !important; }
+}
