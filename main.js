@@ -29,7 +29,7 @@ async function loadData(){
     el.setAttribute('data-title', it.title);
     el.setAttribute('data-date', it.date);
     el.setAttribute('data-tags', (it.tags||[]).join(','));
-    const href = it.type==='blog' ? `/website/article.html?slug=${it.slug}` : it.href;
+    const href = it.type==='blog' ? `/websitef/article.html?slug=${it.slug}` : it.href;
 
     el.innerHTML = `
       <a class="card" href="${href}" ${/^https?:/.test(href)?'target="_blank" rel="noreferrer"':''}>
@@ -65,13 +65,21 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     const iso = new Isotope(grid, {
       itemSelector: '.grid-item',
       percentPosition: true,
-      masonry: { columnWidth: '.grid-sizer' },
+      masonry: {
+        columnWidth: '.grid-sizer',
+        gutter: '.gutter-sizer'   
+      },
+      transitionDuration: '180ms',         // 短一點順眼
+      hiddenStyle:  { opacity: 0, transform: 'scale(0.98)' },
+      visibleStyle: { opacity: 1, transform: 'scale(1)'    },
+      stagger: 12,                          // 交錯顯示（毫秒）
+
       getSortData: {
         date: el => new Date(el.getAttribute('data-date')).getTime() || 0,
         title: el => (el.getAttribute('data-title')||'').toLowerCase()
       },
       sortBy: 'date',
-      sortAscending: {date:false, title:true}
+      sortAscending: { date:false, title:true }
     });
 
     let currentFilter='*', currentQuery='';

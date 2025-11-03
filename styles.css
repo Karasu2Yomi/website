@@ -24,11 +24,21 @@ a{color:inherit;text-decoration:none}
 #search,#sort{padding:10px 12px;border:1px solid var(--border);background:#0d0f16;color:var(--fg);border-radius:10px;min-height:40px}
 
 /* Isotope: 使用 .grid-sizer + 百分比欄寬（RWD） */
-.grid{position:relative;transition:height .25s ease}
-.grid-sizer,.grid-item{width:50%}             /* 2欄 - 手機/小平板 */
-@media (min-width:720px){ .grid-sizer,.grid-item{width:33.3333%} } /* 3欄 */
-@media (min-width:1024px){ .grid-sizer,.grid-item{width:25%} }     /* 4欄 */
-.grid-item{transition:transform .25s ease,opacity .2s ease;will-change:transform}
+/* 欄寬：2/3/4 欄；gutter 用 px 控制 */
+.grid { position: relative; transition: height .25s ease; padding: 4px 0; } /* 讓左右也不會貼邊 */
+.grid-sizer, .grid-item { width: 50%; }                   /* 手機：2欄 */
+.gutter-sizer { width: 12px; }                             /* 手機間距 */
+.grid-item { will-change: transform, opacity; }  /* 減少抖動、撕裂 */
+@media (min-width: 720px){
+  .grid-sizer, .grid-item { width: 33.3333%; }            /* 平板：3欄 */
+  .gutter-sizer { width: 14px; }                           /* 平板間距 */
+}
+@media (min-width: 1024px){
+  .grid-sizer, .grid-item { width: 25%; }                  /* 桌機：4欄 */
+  .gutter-sizer { width: 16px; }                           /* 桌機間距 */
+}
+
+/* 其他樣式保持不變（card/thumb/hero…） */
 
 /* 卡片 */
 .card{display:block;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform .2s ease,border-color .2s ease}
