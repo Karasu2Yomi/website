@@ -181,19 +181,19 @@ a{color:inherit; text-decoration:none}
 
 /* ===== Performance Tweaks ===== */
 
-/* 保持捲動條常駐，避免內容寬度忽大忽小 */
+/* 固定捲軸寬度，避免出/入場改變頁面寬 */
 html { scrollbar-gutter: stable both-edges; }
 
-/* 不要對容器的高度做動畫（高度動畫會帶動整頁抖動） */
-.grid { transition: none !important; will-change: height; }
+/* 不對容器高度做動畫（高度動畫最容易造成整頁抖） */
+.grid { transition: none; will-change: height; }
 
-/* 只讓卡片做 transform/opacity 動畫，並鎖到 GPU 合成層，減少子像素抖動 */
+/* 只允許卡片自身做 transform/opacity 的變化，並鎖 GPU 合成層 */
 .grid-item {
   will-change: transform, opacity;
   backface-visibility: hidden;
   transform: translateZ(0);
 }
 
-/* 避免 margin/邊框之類被動畫：我們只用 transform/opacity */
-.grid-item,
-.grid-item * { transition-property: transform, opacity, color, border-color, box-shadow; }
+/* Isotope 顯/隱 只用透明度，移除縮放造成的「縮回去」錯覺 */
+.isotope-item { transition: transform 0ms linear, opacity 160ms ease; }
+

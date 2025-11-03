@@ -1,13 +1,15 @@
 // ===== Utils =====
 function debounce(fn, wait = 120){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), wait); }; }
 
-function lockGridHeight(gridEl){
-  const h = gridEl.getBoundingClientRect().height;
-  gridEl.style.height = h + 'px';
+function arrangeWithoutTransitions(args){
+  const prev = iso.options.transitionDuration;
+  iso.options.transitionDuration = 0;           // 暫時關閉位移動畫（瞬排）
+  iso.arrange(args);
+  iso.once('arrangeComplete', () => {
+    iso.options.transitionDuration = prev;      // 排完恢復
+  });
 }
-function unlockGridHeight(gridEl){
-  gridEl.style.height = '';
-}
+
 
 // 圖片事件：成功→淡入並關骨架；失敗→顯示錯誤層
 function attachImgHandlers(img){
@@ -93,11 +95,13 @@ function initIsotope(){
     itemSelector: '.grid-item',
     percentPosition: true,
     masonry: { columnWidth: '.grid-sizer', gutter: '.gutter-sizer' },
-    transitionDuration: '160ms',        // 稍短，利落不拖泥
-    hiddenStyle:  { opacity: 0 },       // 移除 scale 避免視覺「縮回去」的跳感
+
+    /* 關鍵：去掉縮放，只保留透明度；初始動畫時間 160ms */
+    transitionDuration: '160ms',
+    hiddenStyle:  { opacity: 0 },   // ← 不用 scale
     visibleStyle: { opacity: 1 },
-    stagger: 0,    
-    //stagger: 12,
+    stagger: 0,                      // ← 關掉逐格延遲，避免波浪感
+
     getSortData: {
       date: el => new Date(el.dataset.date || 0).getTime() || 0,
       title: el => (el.dataset.title || '').toLowerCase()
@@ -123,10 +127,8 @@ function initIsotope(){
       document.querySelectorAll('.filters .btn').forEach(b => b.classList.remove('is-checked'));
       btn.classList.add('is-checked');
       currentFilter = btn.getAttribute('data-filter') || '*';
-      const gridEl = document.querySelector('.grid');
-      lockGridHeight(gridEl);
-      iso.arrange({ filter: compositeFilter /* 或你的其他參數 */ });
-      iso.once('arrangeComplete', () => unlockGridHeight(gridEl));
+      //iso.arrange({ filter: compositeFilter });
+      arrangeWithoutTransitions({ filter: compositeFilter });
     });
   });
 
@@ -134,10 +136,8 @@ function initIsotope(){
   if (searchInput){
     searchInput.addEventListener('input', debounce(()=>{
       currentQuery = (searchInput.value || '').trim().toLowerCase();
-      const gridEl = document.querySelector('.grid');
-      lockGridHeight(gridEl);
-      iso.arrange({ filter: compositeFilter /* 或你的其他參數 */ });
-      iso.once('arrangeComplete', () => unlockGridHeight(gridEl));
+      //iso.arrange({ filter: compositeFilter });
+      arrangeWithoutTransitions({ filter: compositeFilter });
     }, 150));
   }
 
@@ -145,10 +145,12 @@ function initIsotope(){
   if (sortSelect){
     sortSelect.addEventListener('change', ()=>{
       const v = sortSelect.value;
-      if (v === 'date-desc') iso.arrange({ sortBy:'date',  sortAscending:false });
-      if (v === 'date-asc')  iso.arrange({ sortBy:'date',  sortAscending:true  });
-      if (v === 'title-asc') iso.arrange({ sortBy:'title', sortAscending:true  });
-      if (v === 'title-desc')iso.arrange({ sortBy:'title', sortAscending:false });
+      const opt =
+        v === 'date-desc'  ? { sortBy:'date',  sortAscending:false } :
+        v === 'date-asc'   ? { sortBy:'date',  sortAscending:true  } :
+        v === 'title-asc'  ? { sortBy:'title', sortAscending:true  } :
+                            { sortBy:'title', sortAscending:false };
+      arrangeWithoutTransitions(opt);
     });
   }
 
