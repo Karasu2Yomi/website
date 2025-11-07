@@ -625,4 +625,7 @@ select option,
 }
 
 /* 按鈕不縮小，保持可讀性 */
-.filters .btn{ flex: 0 0 auto; }
+.filters .btn{ 
+  flex: 0 0 auto;
+  color: var(--fg); 
+}
