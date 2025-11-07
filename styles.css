@@ -584,3 +584,33 @@ select option,
   background: none;
   animation: none;
 }
+
+/* 單行、超出寬度隱藏，允許水平滾動 */
+.filters{
+  display: flex;
+  flex-wrap: nowrap;       /* 關鍵：不換行 */
+  gap: 8px;
+  overflow-x: auto;        /* 可水平滾動 */
+  overflow-y: hidden;
+  scrollbar-width: none;   /* Firefox 隱藏捲軸 */
+  -ms-overflow-style: none;
+  position: relative;
+  padding-inline: 8px;     /* 留點邊距 */
+}
+.filters::-webkit-scrollbar{ display:none; } /* WebKit 隱藏捲軸 */
+
+/* 兩側漸隱提示可滑動（不遮擋按鈕點擊） */
+.filters::before,
+.filters::after{
+  content:"";
+  position:absolute; top:0; bottom:0; width:28px; pointer-events:none;
+}
+.filters::before{
+  left:0; background:linear-gradient(90deg, var(--bg) 0%, transparent 100%);
+}
+.filters::after{
+  right:0; background:linear-gradient(270deg, var(--bg) 0%, transparent 100%);
+}
+
+/* 按鈕不縮小，保持可讀性 */
+.filters .btn{ flex: 0 0 auto; }
