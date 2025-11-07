@@ -585,6 +585,11 @@ select option,
   animation: none;
 }
 
+/* ===== 控制列：水平滾動範例 ===== */
+.filters-box{
+  position:relative; overflow:hidden;  /* 外層不滾 */
+}
+
 /* 單行、超出寬度隱藏，允許水平滾動 */
 .filters{
   display: flex;
@@ -597,18 +602,25 @@ select option,
   position: relative;
   padding-inline: 8px;     /* 留點邊距 */
 }
-.filters::-webkit-scrollbar{ display:none; } /* WebKit 隱藏捲軸 */
+.filters::-webkit-scrollbar{ 
+  display:none; 
+} /* WebKit 隱藏捲軸 */
 
 /* 兩側漸隱提示可滑動（不遮擋按鈕點擊） */
-.filters::before,
-.filters::after{
+.filters-box::before,
+.filters-box::after{
   content:"";
-  position:absolute; top:0; bottom:0; width:28px; pointer-events:none;
+  position:absolute;
+  top:0; 
+  bottom:0; 
+  width:28px; 
+  pointer-events:none;
+  z-index:1;
 }
-.filters::before{
+.filters-box::before{
   left:0; background:linear-gradient(90deg, var(--bg) 0%, transparent 100%);
 }
-.filters::after{
+.filters-box::after{
   right:0; background:linear-gradient(270deg, var(--bg) 0%, transparent 100%);
 }
 
