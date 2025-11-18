@@ -364,7 +364,10 @@ select option,
 
   display: -webkit-box;
   -webkit-box-orient: vertical;
+
+  line-clamp: 3;
   -webkit-line-clamp: 3;     /* 3 行で切る */
+  
   overflow: hidden;
   position: relative;
   padding-right: 70px;
