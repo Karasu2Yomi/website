@@ -79,12 +79,12 @@ async function loadData(){
 }
 
 document.addEventListener('DOMContentLoaded', async ()=>{
+  await loadTags(); // 先載入標籤
+
   const grid = document.querySelector('.grid');
-  const filterButtons = document.querySelectorAll('.filters .btn');
   const searchInput = document.getElementById('search');
   const sortSelect = document.getElementById('sort');
-
-  await loadTags(); // 先載入標籤
+  const filterButtons = document.querySelectorAll('.filters .btn');
 
   await loadData(); // 先渲染
 
