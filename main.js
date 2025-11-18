@@ -19,6 +19,23 @@ function attachImgHandlers(img){
   }, {once:true});
 }
 
+async function loadTags(){
+  const res = await fetch('tags.json?ts=' + Date.now());
+  const tags = await res.json();
+  const filtersEl = document.querySelector('.filters');
+  const frag = document.createDocumentFragment();
+  tags.forEach(tag=>{
+    const btn = document.createElement('button');
+    btn.className = 'btn';
+    if (tag.type === 'ALL') btn.classList.add('is-checked');
+    if (tag.visible===false) btn.style.display='none';
+    btn.setAttribute('data-filter', `[${tag.filter}="${tag.type}"]`);
+    btn.textContent = tag.text;
+    frag.appendChild(btn);
+  });
+  filtersEl.appendChild(frag);
+}
+
 async function loadData(){
   const res = await fetch('data.json?ts=' + Date.now());
   const items = await res.json();
@@ -72,6 +89,8 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   const filterButtons = document.querySelectorAll('.filters .btn');
   const searchInput = document.getElementById('search');
   const sortSelect = document.getElementById('sort');
+
+  await loadTags(); // 先載入標籤
 
   await loadData(); // 先渲染
 
