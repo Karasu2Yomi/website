@@ -4,19 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="icon" type="image/x-icon" href="/website/favicon.ico">
-  <title>你的名稱｜Portfolio & Blog</title>
+  <title>カラスとヨミ｜Portfolio & Blog</title>
   <link rel="stylesheet" href="styles.css" />
   
 </head>
 <body>
   <header class="site-header">
     <div class="container">
-      <h1>你的名稱</h1>
-      <p class="subtitle">Game Dev / AI × Games / Blog</p>
+      <h1>カラスとヨミ</h1>
+      <p class="subtitle">Game Dev ・ AI ・ Games ・ Blog</p>
       <nav class="meta">
-        <a href="https://github.com/你的GitHub帳號" target="_blank" rel="noreferrer">GitHub</a>
-        <a href="/" aria-current="page">Home</a>
-        <a href="mailto:you@example.com">Contact</a>
+        <a href="https://github.com/karasu2yomi" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="/website/" aria-current="page">Home</a>
+        <!-- <a href="mailto:you@example.com">Contact</a> -->
       </nav>
     </div>
   </header>
@@ -24,32 +24,17 @@
   <section class="controls container">
     <div class="filters-box">
       <div class="filters">
-        <!-- <button class="btn is-checked" data-filter="*">全部</button>
-        <button class="btn" data-filter='[data-type="project"]'>作品</button>
-        <button class="btn" data-filter='[data-type="blog"]'>文章</button>
-        <button class="btn" data-filter='[data-tags*="C++"]'>C++</button>
-        <button class="btn" data-filter='[data-tags*="AI"]'>AI</button>
-        <button class="btn" data-filter='[data-tags*="Game"]'>Game</button>
-        <button class="btn" data-filter='[data-type="project"]'>作品</button>
-        <button class="btn" data-filter='[data-type="blog"]'>文章</button>
-        <button class="btn" data-filter='[data-tags*="C++"]'>C++</button>
-        <button class="btn" data-filter='[data-tags*="AI"]'>AI</button>
-        <button class="btn" data-filter='[data-tags*="Game"]'>Game</button>
-        <button class="btn" data-filter='[data-type="project"]'>作品</button>
-        <button class="btn" data-filter='[data-type="blog"]'>文章</button>
-        <button class="btn" data-filter='[data-tags*="C++"]'>C++</button>
-        <button class="btn" data-filter='[data-tags*="AI"]'>AI</button>
-        <button class="btn" data-filter='[data-tags*="Game"]'>Game</button> -->
+        <!-- カテゴリボタンを生成・描画する -->
       </div>
     </div>
 
     <div class="search-sort">
-      <input id="search" type="search" placeholder="搜尋標題、摘要、標籤…" inputmode="search" />
-      <select id="sort" aria-label="排序">
-        <option value="date-desc">最新優先</option>
-        <option value="date-asc">最舊優先</option>
-        <option value="title-asc">標題 A→Z</option>
-        <option value="title-desc">標題 Z→A</option>
+      <input id="search" type="search" placeholder="タイトル・概要・タグなどを検索…" inputmode="search" />
+      <select id="sort" aria-label="順番を並び替え">
+        <option value="date-desc">新しい順</option>
+        <option value="date-asc">古い順</option>
+        <option value="title-asc">タイトル A→Z</option>
+        <option value="title-desc">タイトル Z→A</option>
       </select>
     </div>
   </section>
@@ -58,12 +43,12 @@
     <div class="grid">
       <div class="grid-sizer"></div>
       <div class="gutter-sizer"></div>
-      <!-- 動態渲染卡片 -->
+      <!-- カードを生成・描画する -->
     </div>
   </main>
 
   <footer class="site-footer">
-    <div class="container">© <span id="y"></span> 你的名稱</div>
+    <div class="container">© <span id="y"> </span>カラスとヨミ</div>
   </footer>
   <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
   <!-- Isotope + imagesLoaded -->

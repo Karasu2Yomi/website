@@ -1,21 +1,18 @@
 const PLACEHOLDER_CSS_ONLY = true; // 僅用 CSS 骨架，不使用佔位圖
 
 function debounce(fn, wait=120){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), wait); }; }
-// const relayout = debounce(()=> iso.layout(), 100);
-// window.addEventListener('resize', relayout, { passive: true });
-// window.addEventListener('orientationchange', ()=> setTimeout(()=> iso.layout(), 50), { passive: true });
 
 function attachImgHandlers(img){
-  // 載入完成 → 淡入（不需要任何佔位圖）
+  // 読み込み完了 → フェードイン（プレースホルダー不要）
   const show = ()=> img.classList.add('img-loaded');
   if (img.complete && img.naturalWidth>0) show();
   else img.addEventListener('load', show, {once:true});
 
-  // 失敗 → 套 CSS 樣式（不載入任何圖）
+  // 失敗 → CSSスタイルを適用（画像は読み込まない）
   img.addEventListener('error', ()=>{
     const box = img.parentElement; // .thumb
     box.classList.add('is-error');
-    img.style.display='none'; // 避免瀏覽器破圖圖示
+    img.style.display='none'; // ブラウザの壊れた画像アイコンを避ける
   }, {once:true});
 }
 
@@ -74,7 +71,7 @@ async function loadData(){
           </ul>
         </div>
       </a>`;
-    // 圖片事件
+    // 画像イベントを添付
     el.querySelectorAll('img').forEach(attachImgHandlers);
     frag.appendChild(el);
   });
@@ -83,16 +80,16 @@ async function loadData(){
 }
 
 document.addEventListener('DOMContentLoaded', async ()=>{
-  await loadTags(); // 先載入標籤
+  await loadTags(); // 先にタグを読み込む → フィルターボタン生成
 
   const grid = document.querySelector('.grid');
   const searchInput = document.getElementById('search');
   const sortSelect = document.getElementById('sort');
   const filterButtons = document.querySelectorAll('.filters .btn');
 
-  await loadData(); // 先渲染
+  await loadData(); // 先にデータを読み込む → グリッドアイテム生成
 
-  imagesLoaded(grid, ()=>{ // 再初始化 Isotope
+  imagesLoaded(grid, ()=>{ //  再初期化 Isotope
     const iso = new Isotope(grid, {
       itemSelector: '.grid-item',
       percentPosition: true,
@@ -100,10 +97,10 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         columnWidth: '.grid-sizer',
         gutter: '.gutter-sizer'   
       },
-      transitionDuration: '180ms',         // 短一點順眼
+      transitionDuration: '180ms',         // 少し短めで見やすく
       hiddenStyle:  { opacity: 0, transform: 'scale(0.98)' },
       visibleStyle: { opacity: 1, transform: 'scale(1)'    },
-      stagger: 12,                          // 交錯顯示（毫秒）
+      stagger: 12,                          // 交差表示（ミリ秒）
 
       getSortData: {
         date: el => new Date(el.getAttribute('data-date')).getTime() || 0,
@@ -147,7 +144,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
       if (v==='title-desc')iso.arrange({sortBy:'title',sortAscending:false});
     });
 
-    // 若日後需要動態追加：請先 append 到 DOM → 對新元素 imagesLoaded → iso.appended(newElems) → iso.arrange()
+    // 将来動的に追加する場合：まず DOM に append → 新しい要素に imagesLoaded → iso.appended(newElems) → iso.arrange()
   });
 });
 
