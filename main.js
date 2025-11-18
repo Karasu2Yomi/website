@@ -78,12 +78,6 @@ async function loadData(){
   grid.appendChild(frag);
 }
 
-document.querySelector('.filters')?.addEventListener('wheel', (e)=>{
-  if (e.deltaY === 0 || e.shiftKey) return;
-  e.preventDefault();
-  e.currentTarget.scrollLeft += e.deltaY;
-}, { passive:false });
-
 document.addEventListener('DOMContentLoaded', async ()=>{
   const grid = document.querySelector('.grid');
   const filterButtons = document.querySelectorAll('.filters .btn');
@@ -152,3 +146,9 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     // 若日後需要動態追加：請先 append 到 DOM → 對新元素 imagesLoaded → iso.appended(newElems) → iso.arrange()
   });
 });
+
+document.querySelector('.filters')?.addEventListener('wheel', (e)=>{
+  if (e.deltaY === 0 || e.shiftKey) return;
+  e.preventDefault();
+  e.currentTarget.scrollLeft += e.deltaY;
+}, { passive:false });
