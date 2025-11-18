@@ -360,8 +360,31 @@ select option,
 
 .desc {
   margin: 0 0 10px;
-  color: var(--muted)
+  color: var(--muted);
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;     /* 2 行で切る */
+  overflow: hidden;
+  position: relative;
+  padding-right: 70px;
 }
+
+.desc:empty::before {
+  content: "[...]";
+  color: var(--muted);
+}
+
+.desc.more::after {
+  content: "[...more]";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding-left: 6px;
+  background: var(--bg);
+  color: var(--accent);
+}
+
 
 .meta-list {
   list-style: none;
