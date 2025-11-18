@@ -367,7 +367,7 @@ select option,
 
   line-clamp: 3;
   -webkit-line-clamp: 3;     /* 3 行で切る */
-  
+
   overflow: hidden;
   position: relative;
   padding-right: 70px;
@@ -384,7 +384,7 @@ select option,
   bottom: 0;
   right: 0;
   padding-left: 6px;
-  background: var(--bg);
+  background: var(--muted);
   color: var(--accent);
 }
 
