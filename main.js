@@ -64,7 +64,7 @@ async function loadData(){
         </div>
         <div class="card-body">
           <h3>${it.title}</h3>
-          <p class="desc">${it.excerpt || ''}</p>
+          <p class="desc more">${it.excerpt || ''}</p>
           <ul class="meta-list">
             <li>Tags: ${(it.tags||[]).join(', ')}</li>
             <li>${it.type==='project'?'Updated':'Published'}: ${it.date}</li>
