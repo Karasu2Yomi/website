@@ -385,21 +385,6 @@ select option,
   color: var(--accent);
 }
 
-/* feature test */
-/* 滑鼠 hover 時：完整展開 */
-.card:hover .desc {
-  -webkit-line-clamp: unset;  /* 移除截斷 */
-  max-height: none;
-  overflow: visible;
-}
-
-/* hover 展開時 more 消失 */
-.card:hover .desc.more::after {
-  opacity: 0;
-}
-/**/
-
-
 .meta-list {
   list-style: none;
   padding: 0;
