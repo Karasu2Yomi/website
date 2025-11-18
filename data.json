@@ -1,6 +1,6 @@
 [
   {
-    "type": "project",
+    "type": "Project",
     "title": "MNK Game AI",
     "date": "2025-08-02",
     "tags": ["C++","AI","Game"],
@@ -9,7 +9,7 @@
     "excerpt": "通用 MNK（3/4/5 連珠）AI 與可視化對弈。"
   },
   {
-    "type": "project",
+    "type": "Project",
     "title": "Top-Down Tank",
     "date": "2025-06-29",
     "tags": ["C++","Game","AI"],
@@ -18,7 +18,7 @@
     "excerpt": "無 HP、穿甲判定、乘員永久死亡的 2D 坦克原型。"
   },
   {
-    "type": "blog",
+    "type": "Blog",
     "title": "Hello World",
     "slug": "hello-world",
     "date": "2025-10-20",
@@ -27,7 +27,7 @@
     "excerpt": "用 Markdown + Isotope 打造作品集與部落格。"
   },
   {
-    "type": "blog",
+    "type": "Blog",
     "size": "w2",
     "title": "Hello World",
     "slug": "hello-world",
@@ -37,7 +37,7 @@
     "excerpt": "用 Markdown + Isotope 打造作品集與部落格。"
   },
   {
-    "type": "project",
+    "type": "Project",
     "title": "MNK Game AI",
     "date": "2025-08-02",
     "tags": ["C++","AI","Game"],
@@ -46,7 +46,7 @@
     "excerpt": "通用 MNK（3/4/5 連珠）AI 與可視化對弈。"
   },
   {
-    "type": "project",
+    "type": "Project",
     "title": "Top-Down Tank",
     "date": "2025-06-29",
     "tags": ["C++","Game","AI"],
@@ -55,7 +55,7 @@
     "excerpt": "無 HP、穿甲判定、乘員永久死亡的 2D 坦克原型。"
   },
   {
-    "type": "blog",
+    "type": "Blog",
     "title": "Hello World",
     "slug": "hello-world",
     "date": "2025-10-20",
@@ -64,7 +64,7 @@
     "excerpt": "用 Markdown + Isotope 打造作品集與部落格。"
   },
   {
-    "type": "blog",
+    "type": "Blog",
     "size": "h2",
     "title": "Hello World",
     "slug": "hello-world",
@@ -74,7 +74,7 @@
     "excerpt": "用 Markdown + Isotope 打造作品集與部落格。"
   },
   {
-    "type": "project",
+    "type": "Project",
     "title": "MNK Game AI",
     "date": "2025-08-02",
     "tags": ["C++","AI","Game"],
@@ -83,7 +83,7 @@
     "excerpt": "通用 MNK（3/4/5 連珠）AI 與可視化對弈。"
   },
   {
-    "type": "project",
+    "type": "Project",
     "title": "Top-Down Tank",
     "date": "2025-06-29",
     "tags": ["C++","Game","AI"],
@@ -92,7 +92,7 @@
     "excerpt": "無 HP、穿甲判定、乘員永久死亡的 2D 坦克原型。"
   },
   {
-    "type": "blog",
+    "type": "Blog",
     "title": "Hello World",
     "slug": "hello-world",
     "date": "2025-10-20",
@@ -101,7 +101,7 @@
     "excerpt": "用 Markdown + Isotope 打造作品集與部落格。"
   },
   {
-    "type": "blog",
+    "type": "Blog",
     "size": "w3",
     "title": "Hello World",
     "slug": "hello-world",

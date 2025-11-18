@@ -1,66 +1,66 @@
 [
   {
-    "type": "ALL",
+    "type": "All",
     "filter": "*",
     "text": "すべて",
     "visible": true
   },
   {
-    "type": "project",
+    "type": "Project",
     "filter": "data-type",
     "text": "作品",
     "visible": true
   },
   {
-    "type": "blog",
+    "type": "Blog",
     "filter": "data-type",
     "text": "文章",
     "visible": true
   },
   {
-    "type": "chatting",
+    "type": "Chatting",
     "filter": "data-type",
     "text": "雑談",
     "visible": true
   },
   {
-    "type": "java",
+    "type": "Java",
     "filter": "data-tags*",
     "text": "Java",
     "visible": false
   },
   {
-    "type": "c++",
+    "type": "C++",
     "filter": "data-tags*",
     "text": "C++",
     "visible": true
   },
   {
-    "type": "nodejs",
+    "type": "Node.js",
     "filter": "data-tags*",
     "text": "Node.js",
     "visible": false
   },
   {
-    "type": "ai",
+    "type": "AI",
     "filter": "data-tags*",
     "text": "AI",
     "visible": false
   },
   {
-    "type": "game",
+    "type": "Game",
     "filter": "data-tags*",
     "text": "ゲーム",
     "visible": true
   },
   {
-    "type": "web",
+    "type": "Web",
     "filter": "data-tags*",
     "text": "ウェブ",
     "visible": true
   },
   {
-    "type": "game_engine",
+    "type": "GameEngine",
     "filter": "data-tags*",
     "text": "ゲームエンジン",
     "visible": false

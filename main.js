@@ -27,7 +27,7 @@ async function loadTags(){
   tags.forEach(tag=>{
     const btn = document.createElement('button');
     btn.className = 'btn';
-    if (tag.type === 'ALL') btn.classList.add('is-checked');
+    if (tag.type === 'All') btn.classList.add('is-checked');
     if (tag.visible===false) btn.style.display='none';
     btn.setAttribute('data-filter', `[${tag.filter}="${tag.type}"]`);
     btn.textContent = tag.text;
