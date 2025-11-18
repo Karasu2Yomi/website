@@ -376,7 +376,7 @@ select option,
 }
 
 .desc.more::after {
-  content: "[...more]";
+  content: "[more]";
   position: absolute;
   bottom: 0;
   right: 0;

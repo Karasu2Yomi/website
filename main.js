@@ -55,7 +55,7 @@ async function loadData(){
     if (it.size === 'w3') el.classList.add('grid-item--w3');
     if (it.tall === true) el.classList.add('grid-item--h2');
 
-    const href = it.type==='blog' ? `/website/article.html?slug=${it.slug}` : it.href;
+    const href = it.type==='Blog' ? `/website/article.html?slug=${it.slug}` : it.href;
 
     el.innerHTML = `
       <a class="card" href="${href}" ${/^https?:/.test(href)?'target="_blank" rel="noreferrer"':''}>
