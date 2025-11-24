@@ -370,21 +370,21 @@ select option,
   
   overflow: hidden;
   position: relative;
-  padding-right: 70px;
+  /* padding-right: 70px; */
 }
 
 .desc:empty::before {
-  content: "[...]";
+  /* content: "[...]"; */
   color: var(--muted);
 }
 
 .desc.more::after {
-  content: "[more]";
+  /* content: "[more]"; */
   position: absolute;
   bottom: 0;
   right: 0;
   padding-left: 6px;
-  /*background: var(--card);  背景を付ける場合*/
+  /*background: var(--card);*/  /* 背景を付ける場合 */
   color: var(--accent);
 }
 
